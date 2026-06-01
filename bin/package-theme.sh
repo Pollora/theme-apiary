@@ -44,7 +44,6 @@ rsync -av --delete \
     --exclude='bin/' \
     --exclude='README.md' \
     --exclude='languages/*.mo' \
-    --exclude='languages/*.po' \
     --exclude='screenshot.png' \
     --exclude='tailwind.safelist.txt' \
     "$SOURCE/" "$TARGET_DIR/" \
@@ -63,7 +62,6 @@ find "$TARGET_DIR" -type f \
     -not -name "*.jpg" \
     -not -name "*.svg" \
     -not -name "*.mo" \
-    -not -name "*.po" \
     | while read -r file; do
         sed -i \
             -e "s|Theme\\\\${CODE_STUDLY}|%theme_namespace%|g" \
