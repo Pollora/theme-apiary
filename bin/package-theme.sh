@@ -57,6 +57,7 @@ find "$TARGET_DIR" -type f \
     -not -path "*/node_modules/*" \
     -not -name "package-theme.sh" \
     -not -name "README.md" \
+    -not -name "requirements.json" \
     -not -name "*.woff2" \
     -not -name "*.png" \
     -not -name "*.jpg" \
