@@ -1,8 +1,8 @@
 @import "tailwindcss" theme(static);
 @plugin "@tailwindcss/typography";
 
-@source "./views";
-@source "./app";
+@source "../../views";
+@source "../../../app";
 
 @import './backend/components/limit-login-attempts.css';
 @import './backend/components/redis-object.css';
