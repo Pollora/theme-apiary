@@ -1,12 +1,12 @@
 # Apiary
 
-A WooCommerce theme built on the [Pollora](https://github.com/AmphiBee/Pollora) framework, featuring Tailwind CSS v4 and Alpine.js.
+A WooCommerce theme built on the [Pollora](https://pollora.dev) framework, featuring Tailwind CSS v4 and Alpine.js.
 
 ## Requirements
 
 - PHP 8.1+
 - WordPress 6.0+
-- [Pollora](https://github.com/AmphiBee/Pollora) framework
+- [Pollora](https://pollora.dev) framework
 - [WooCommerce](https://woocommerce.com/) 8.0+
 - Node.js 18+ (for asset compilation)
 

@@ -73,10 +73,10 @@ find "$TARGET_DIR" -type f \
             -e "s|${CODE_NAME} Theme Functions|%theme_name% Theme Functions|g" \
             -e "s|register ${CODE_STUDLY} theme|register %theme_name% theme|g" \
             -e "s|register ${CODE_NAME} theme|register %theme_name% theme|g" \
-            -e "s|Theme URI: https://amphibee.fr/|Theme URI: %theme_uri%|g" \
+            -e "s|Theme URI: https://pollora.dev|Theme URI: %theme_uri%|g" \
             -e "s|Description: WooCommerce Theme based on Tailwind UI|Description: %theme_description%|g" \
             -e "s|Author: AmphiBee|Author: %theme_author%|g" \
-            -e "s|Author URI: https://amphibee.fr/|Author URI: %theme_author_uri%|g" \
+            -e "s|Author URI: https://pollora.dev|Author URI: %theme_author_uri%|g" \
             -e "s|Version: [0-9.]*|Version: %theme_version%|g" \
             -e "s|'appName' => '${CODE_STUDLY}'|'appName' => '%theme_name%'|g" \
             -e "s|'appShortName' => '${CODE_STUDLY}'|'appShortName' => '%theme_name%'|g" \
