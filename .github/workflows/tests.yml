@@ -51,11 +51,23 @@ jobs:
         with:
           autostart: false
 
+      # The version is pinned on purpose. `composer create-project
+      # pollora/pollora` with no version installs the last *stable* skeleton,
+      # v13.4.0, which ships a WordPress older than WooCommerce's minimum —
+      # `Current WordPress version (6.9.4) does not meet minimum requirements
+      # for WooCommerce. The plugin requires WordPress 7.0.` That is a failure
+      # that says nothing whatever about this theme.
+      #
+      # `^13.32@beta` resolves to the current beta tag, and create-project
+      # installs from the lock that tag ships — so this is the framework a new
+      # project really gets, not the one its constraint would allow.
+      #
       # --no-install and --no-scripts: the skeleton's install hooks want a
       # database, and there is none until DDEV is up.
       - name: Create the skeleton
         run: |
-          composer create-project pollora/pollora site --no-install --no-scripts --no-interaction
+          composer create-project pollora/pollora site '^13.32@beta' \
+            --no-install --no-scripts --no-interaction
 
       # Same stack as the skeleton's own install scenarios, so a failure here
       # means the theme and not the environment.
