@@ -115,6 +115,18 @@ jobs:
         working-directory: site
         run: ddev exec php artisan key:generate --no-interaction
 
+      # The theme has to work on the WordPress people are actually running.
+      # create-project installs whatever the skeleton's lock pinned on the day
+      # it was tagged, which drifts behind within weeks — so take the newest
+      # release the skeleton's own constraint allows, and print it, because a
+      # sweep is only as current as the WordPress it walked.
+      - name: Use the latest WordPress
+        working-directory: site
+        run: |
+          ddev composer update johnpbloch/wordpress --with-all-dependencies \
+            --no-interaction --no-progress
+          ddev exec wp core version
+
       - name: Install WordPress
         working-directory: site
         run: |
@@ -133,11 +145,18 @@ jobs:
       # through an interactive prompt, which CI cannot answer, so the
       # requirement is met explicitly here — and named, so a reader can see
       # that the theme needs a shop rather than guessing.
+      #
+      # `wp-plugin/`, not `wpackagist-plugin/`: the 13.32 skeleton replaced
+      # wpackagist.org with repo.wp-packages.org, whose packages are named
+      # `wp-plugin/*` and `wp-theme/*`. requirements.json still said the old
+      # name and could not resolve on any current skeleton — found by this job
+      # on its first run, and fixed in the same commit.
       - name: Install WooCommerce
         working-directory: site
         run: |
-          ddev composer require wpackagist-plugin/woocommerce --no-interaction --no-progress
+          ddev composer require wp-plugin/woocommerce --no-interaction --no-progress
           ddev exec wp plugin activate woocommerce
+          ddev exec wp plugin get woocommerce --field=version
 
       # The scaffolder can only download a tag, so without --source this job
       # would measure the last release and report it as the branch being green.
