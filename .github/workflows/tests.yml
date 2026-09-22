@@ -120,11 +120,17 @@ jobs:
       # it was tagged, which drifts behind within weeks — so take the newest
       # release the skeleton's own constraint allows, and print it, because a
       # sweep is only as current as the WordPress it walked.
+      #
+      # --no-scripts: this only replaces core files, and the skeleton's
+      # post-autoload-dump hook runs `pollora:env:setup`, which opens a PDO
+      # connection and falls back to interactive prompts when it cannot. In a
+      # container with no TTY that throws, and composer exits 1 — a red build
+      # that says nothing about WordPress, the theme, or anything else.
       - name: Use the latest WordPress
         working-directory: site
         run: |
           ddev composer update johnpbloch/wordpress --with-all-dependencies \
-            --no-interaction --no-progress
+            --no-scripts --no-interaction --no-progress
           ddev exec wp core version
 
       - name: Install WordPress
