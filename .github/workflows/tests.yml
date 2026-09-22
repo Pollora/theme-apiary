@@ -1,0 +1,214 @@
+name: Tests
+
+on:
+  push:
+    branches:
+      - main
+      - 'feature/**'
+      - 'fix/**'
+      - 'ci/**'
+  pull_request:
+  schedule:
+    # Nightly. This repository ships by tag, not by release: a framework
+    # released after this theme was tagged can break it without a single
+    # commit landing here, and until now nothing would have noticed — the
+    # theme was swept by hand, once, on a developer's machine.
+    - cron: '0 5 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  sweep:
+    name: Sweep (framework ${{ matrix.framework }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    # The scaffolder strips bin/ and .github/, but a fork or a copy of this
+    # repository would otherwise run a workflow that fails for reasons having
+    # nothing to do with the theme.
+    if: github.repository == 'Pollora/theme-apiary'
+
+    # locked: the framework a new project actually installs, which is the
+    #   skeleton's lock rather than its constraint.
+    # develop: the next framework release, before it ships. This is the leg
+    #   that would have caught the theme URI regression fixed in v13.32.0-beta.6
+    #   before it was tagged.
+    strategy:
+      fail-fast: false
+      matrix:
+        framework: [locked, develop]
+
+    steps:
+      - name: Checkout the theme
+        uses: actions/checkout@v6
+        with:
+          path: theme
+
+      - name: Setup DDEV
+        uses: ddev/github-action-setup-ddev@v1
+        with:
+          autostart: false
+
+      # The version is pinned on purpose. `composer create-project
+      # pollora/pollora` with no version installs the last *stable* skeleton,
+      # v13.4.0, which ships a WordPress older than WooCommerce's minimum —
+      # `Current WordPress version (6.9.4) does not meet minimum requirements
+      # for WooCommerce. The plugin requires WordPress 7.0.` That is a failure
+      # that says nothing whatever about this theme.
+      #
+      # `^13.32@beta` resolves to the current beta tag, and create-project
+      # installs from the lock that tag ships — so this is the framework a new
+      # project really gets, not the one its constraint would allow.
+      #
+      # --no-install and --no-scripts: the skeleton's install hooks want a
+      # database, and there is none until DDEV is up.
+      - name: Create the skeleton
+        run: |
+          composer create-project pollora/pollora site '^13.32@beta' \
+            --no-install --no-scripts --no-interaction
+
+      # Same stack as the skeleton's own install scenarios, so a failure here
+      # means the theme and not the environment.
+      - name: Configure DDEV
+        working-directory: site
+        run: |
+          ddev config \
+            --project-name=apiary-ci \
+            --project-type=wordpress \
+            --docroot=public \
+            --php-version=8.4 \
+            --webserver-type=apache-fpm \
+            --database=mariadb:10.11 \
+            --nodejs-version=22 \
+            --disable-settings-management
+
+      - name: Start DDEV
+        working-directory: site
+        run: ddev start
+
+      - name: Prepare .env
+        working-directory: site
+        run: |
+          cp .env.example .env
+          sed -i \
+            -e 's#^APP_URL=.*#APP_URL=https://apiary-ci.ddev.site#' \
+            -e 's#^DB_CONNECTION=.*#DB_CONNECTION=mysql#' \
+            -e 's/^# DB_HOST=.*/DB_HOST=db/' \
+            -e 's/^# DB_PORT=.*/DB_PORT=3306/' \
+            -e 's/^# DB_DATABASE=.*/DB_DATABASE=db/' \
+            -e 's/^# DB_USERNAME=.*/DB_USERNAME=db/' \
+            -e 's/^# DB_PASSWORD=.*/DB_PASSWORD=db/' \
+            .env
+
+      - name: Install Composer dependencies
+        working-directory: site
+        run: ddev composer install --no-interaction --no-progress
+
+      - name: Use framework develop
+        if: matrix.framework == 'develop'
+        working-directory: site
+        run: ddev composer require pollora/framework:dev-develop --with-all-dependencies --no-interaction --no-progress
+
+      - name: Generate application key
+        working-directory: site
+        run: ddev exec php artisan key:generate --no-interaction
+
+      # The theme has to work on the WordPress people are actually running,
+      # and create-project installs whatever the skeleton's lock pinned on the
+      # day it was tagged, which drifts behind within weeks.
+      #
+      # Pinned to 7.1.0 for now, deliberately: johnpbloch/wordpress-core 7.1.1
+      # ships without wp-includes. Measured on the published archive — 1129
+      # entries and 0 under wp-includes, against 4251 and 3122 for 7.1.0 — so
+      # 7.1.1 is not a WordPress that can boot, the framework's l10n patch has
+      # no file to apply to, and `wp core version` answers "This does not seem
+      # to be a WordPress installation". Nothing in this repository can fix
+      # that. Drop the constraint once upstream republishes.
+      #
+      # --no-scripts: this only replaces core files, and the skeleton's
+      # post-autoload-dump hook runs `pollora:env:setup`, which opens a PDO
+      # connection and falls back to interactive prompts when it cannot. In a
+      # container with no TTY that throws, and composer exits 1 — a red build
+      # that says nothing about WordPress, the theme, or anything else.
+      - name: Use the latest usable WordPress
+        working-directory: site
+        run: |
+          ddev composer update johnpbloch/wordpress:7.1.0 --with-all-dependencies \
+            --no-scripts --no-interaction --no-progress
+
+      # An incomplete core fails forty lines later as an unapplied patch or a
+      # blank page. Name it here instead.
+      - name: Check the WordPress core is complete
+        working-directory: site
+        run: |
+          ddev exec test -f public/cms/wp-includes/l10n.php \
+            || { echo "::error::WordPress core is incomplete — wp-includes is missing. See the pin above."; exit 1; }
+          ddev exec wp core version
+
+      - name: Install WordPress
+        working-directory: site
+        run: |
+          ddev exec php artisan pollora:install --install \
+            --title="Apiary CI" \
+            --description="Pollora theme-apiary CI" \
+            --admin-user=admin \
+            --admin-email=admin@example.com \
+            --admin-password=apiary-ci \
+            --locale=en_US \
+            --public=false \
+            --no-interaction || true
+          ddev exec wp core is-installed
+
+      # requirements.json declares this. The scaffolder offers to install it
+      # through an interactive prompt, which CI cannot answer, so the
+      # requirement is met explicitly here — and named, so a reader can see
+      # that the theme needs a shop rather than guessing.
+      #
+      # `wp-plugin/`, not `wpackagist-plugin/`: the 13.32 skeleton replaced
+      # wpackagist.org with repo.wp-packages.org, whose packages are named
+      # `wp-plugin/*` and `wp-theme/*`. requirements.json still said the old
+      # name and could not resolve on any current skeleton — found by this job
+      # on its first run, and fixed in the same commit.
+      - name: Install WooCommerce
+        working-directory: site
+        run: |
+          ddev composer require wp-plugin/woocommerce --no-interaction --no-progress
+          ddev exec wp plugin activate woocommerce
+          ddev exec wp plugin get woocommerce --field=version
+
+      # The scaffolder can only download a tag, so without --source this job
+      # would measure the last release and report it as the branch being green.
+      - name: Place the commit under test where the container can reach it
+        run: cp -r theme site/theme-under-test
+
+      - name: Install the theme
+        working-directory: site
+        run: |
+          ddev exec bash -c '
+            php theme-under-test/bin/ci/install.php \
+              --url=https://apiary-ci.ddev.site \
+              --slug=apiary \
+              --source=/var/www/html/theme-under-test
+          '
+
+      - name: Seed the shop
+        working-directory: site
+        run: ddev exec wp eval-file theme-under-test/bin/ci/seed-shop.php
+
+      # 40 checks: theme resolution, every anonymous page, a filled cart and
+      # the checkout, the login screen, and wp-admin including the block
+      # editor. An empty 200 fails — that is the failure mode this family of
+      # bugs has, and it looks like success to curl.
+      - name: Sweep
+        working-directory: site
+        run: |
+          ddev exec bash -c '
+            php theme-under-test/bin/tests/sweep.php --url=https://apiary-ci.ddev.site
+          '
+
+      - name: Laravel log
+        if: failure()
+        working-directory: site
+        run: tail -n 200 storage/logs/laravel.log || true
