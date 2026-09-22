@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * Give the sweep a shop to walk.
  *
@@ -15,6 +13,12 @@ declare(strict_types=1);
  * on an empty site. A fresh WooCommerce has neither, so CI has to create them.
  *
  * Idempotent: re-running it finds what it made last time.
+ *
+ * No `declare(strict_types=1)` here, unlike every other file in this
+ * repository: `wp eval-file` evaluates the contents rather than including the
+ * file, and a strict_types declaration is only legal as the very first
+ * statement of a script. Adding it back fails the seed with
+ * "strict_types declaration must be the very first statement in the script".
  */
 
 if (! class_exists(\WooCommerce::class)) {
