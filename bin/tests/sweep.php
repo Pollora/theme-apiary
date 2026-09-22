@@ -457,6 +457,69 @@ test('The checkout carries a form that could be submitted', function () use ($br
 
 // ─────────────────────────────────────────────────────────────────────────────
 
+section('Login screen — the one page of the site nobody had ever looked at');
+
+// Anonymous on purpose, and before the sweep logs in: this is the screen a
+// visitor meets, and a logged-in request is redirected away from it.
+$loginUrl = trim(wpEval('echo wp_login_url();'));
+$loginPage = (new Browser)->visit($loginUrl);
+
+test('It answers 200 with a form', function () use ($loginPage, $loginUrl) {
+    if ($loginPage['status'] !== 200) {
+        // It answered 404 with a perfectly good form until 13.32.0-beta.4:
+        // the URL was resolved as a content request and matched the
+        // attachment rewrite rule.
+        return "{$loginUrl} answered {$loginPage['status']}";
+    }
+
+    return str_contains($loginPage['body'], 'name="loginform"')
+        ? true
+        : 'it answered 200 without a login form';
+});
+
+test("The theme's config/login.php reaches it", fn () => str_contains($loginPage['body'], 'pollora-login')
+    ? true
+    : 'the theme ships a config/login.php and none of it reached the screen');
+
+test("It wears this theme's colours, resolved through their var() fallbacks", function () use ($loginPage) {
+    if (preg_match('/--pollora-login-primary:\s*([^;]+);/', $loginPage['body'], $m) !== 1) {
+        return 'no --pollora-login-primary was printed';
+    }
+
+    $primary = trim($m[1]);
+
+    // This theme.json declares `primary` as
+    // var(--wp--preset--color--primary,#1f2937) — a reference to itself, which
+    // CSS discards as a cycle. #1f2937 is the only colour actually in the
+    // data, and the login screen carries none of WordPress's preset variables
+    // anyway, so that is what has to come out.
+    return $primary === '#1f2937'
+        ? true
+        : "primary resolved to {$primary}; the var() fallback in theme.json is #1f2937";
+});
+
+test('The logo is inlined, not linked to a URL that does not exist', function () use ($loginPage) {
+    // A file inside the theme has no URL here: only the Vite build output is
+    // web-served, and get_theme_file_uri() answers an empty string.
+    return str_contains($loginPage['body'], '--pollora-login-logo: url("data:image/svg+xml;base64,')
+        ? true
+        : 'no inlined logo reached the screen';
+});
+
+test('It sends people to this site, not to wordpress.org', fn () => str_contains($loginPage['body'], 'wordpress.org')
+    ? 'the logo still points at wordpress.org'
+    : true);
+
+test('The lost-password screen is dressed too', function () use ($loginUrl) {
+    $body = (new Browser)->visit($loginUrl.'?action=lostpassword')['body'];
+
+    return str_contains($body, 'pollora-login') && str_contains($body, '<style id="pollora-login">')
+        ? true
+        : 'the screens that share login_head are not all covered';
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+
 section('Back office — logged in, including the block editor');
 
 $adminUser = 'apiary-sweep';
