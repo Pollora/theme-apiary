@@ -115,22 +115,36 @@ jobs:
         working-directory: site
         run: ddev exec php artisan key:generate --no-interaction
 
-      # The theme has to work on the WordPress people are actually running.
-      # create-project installs whatever the skeleton's lock pinned on the day
-      # it was tagged, which drifts behind within weeks — so take the newest
-      # release the skeleton's own constraint allows, and print it, because a
-      # sweep is only as current as the WordPress it walked.
+      # The theme has to work on the WordPress people are actually running,
+      # and create-project installs whatever the skeleton's lock pinned on the
+      # day it was tagged, which drifts behind within weeks.
+      #
+      # Pinned to 7.1.0 for now, deliberately: johnpbloch/wordpress-core 7.1.1
+      # ships without wp-includes. Measured on the published archive — 1129
+      # entries and 0 under wp-includes, against 4251 and 3122 for 7.1.0 — so
+      # 7.1.1 is not a WordPress that can boot, the framework's l10n patch has
+      # no file to apply to, and `wp core version` answers "This does not seem
+      # to be a WordPress installation". Nothing in this repository can fix
+      # that. Drop the constraint once upstream republishes.
       #
       # --no-scripts: this only replaces core files, and the skeleton's
       # post-autoload-dump hook runs `pollora:env:setup`, which opens a PDO
       # connection and falls back to interactive prompts when it cannot. In a
       # container with no TTY that throws, and composer exits 1 — a red build
       # that says nothing about WordPress, the theme, or anything else.
-      - name: Use the latest WordPress
+      - name: Use the latest usable WordPress
         working-directory: site
         run: |
-          ddev composer update johnpbloch/wordpress --with-all-dependencies \
+          ddev composer update johnpbloch/wordpress:7.1.0 --with-all-dependencies \
             --no-scripts --no-interaction --no-progress
+
+      # An incomplete core fails forty lines later as an unapplied patch or a
+      # blank page. Name it here instead.
+      - name: Check the WordPress core is complete
+        working-directory: site
+        run: |
+          ddev exec test -f public/cms/wp-includes/l10n.php \
+            || { echo "::error::WordPress core is incomplete — wp-includes is missing. See the pin above."; exit 1; }
           ddev exec wp core version
 
       - name: Install WordPress
