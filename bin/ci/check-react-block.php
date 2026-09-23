@@ -50,7 +50,33 @@ echo "\n\033[1m── A classic React block, end to end ──\033[0m\n";
 $type = WP_Block_Type_Registry::get_instance()->get_registered($blockName);
 
 if (! $type instanceof WP_Block_Type) {
-    ko("{$blockName} is not registered — the BlocksServiceProvider the scaffolder wrote did not reach the registry");
+    ko("{$blockName} is not registered");
+
+    // Everything needed to tell which link of the chain broke, printed here
+    // rather than guessed at from outside.
+    $theme = get_stylesheet_directory();
+    $provider = $theme.'/app/Providers/BlocksServiceProvider.php';
+    $blockDir = $theme.'/resources/views/blocks/'.basename(str_replace('/', '-', $blockName));
+
+    echo "\n\033[1mWhere the chain stands\033[0m\n";
+    echo '  theme directory          '.$theme."\n";
+    echo '  BlocksServiceProvider    '.(is_file($provider) ? 'present' : 'ABSENT')."\n";
+
+    if (is_file($provider)) {
+        $head = (string) file_get_contents($provider);
+        preg_match('/^namespace (.+);$/m', $head, $ns);
+        preg_match('/directory: (.+),$/m', $head, $dir);
+        echo '  its namespace            '.($ns[1] ?? '?')."\n";
+        echo '  the directory it scans   '.trim($dir[1] ?? '?')."\n";
+        echo '  class loadable           '.(class_exists(($ns[1] ?? '').'\\BlocksServiceProvider') ? 'yes' : 'NO')."\n";
+    }
+
+    echo '  blocks directory         '.(is_dir(dirname($blockDir)) ? implode(', ', array_diff(scandir(dirname($blockDir)), ['.', '..'])) : 'ABSENT')."\n";
+
+    $all = array_keys(WP_Block_Type_Registry::get_instance()->get_all_registered());
+    $mine = array_values(array_filter($all, fn ($n) => ! str_starts_with($n, 'core/')));
+    echo '  non-core blocks in the registry  '.($mine === [] ? '(none)' : implode(', ', $mine))."\n";
+
     echo "\n\033[31m1 check failed.\033[0m\n\n";
     exit(1);
 }
