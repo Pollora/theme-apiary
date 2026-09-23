@@ -73,9 +73,20 @@ if (! $type instanceof WP_Block_Type) {
 
     echo '  blocks directory         '.(is_dir(dirname($blockDir)) ? implode(', ', array_diff(scandir(dirname($blockDir)), ['.', '..'])) : 'ABSENT')."\n";
 
+    // The decisive one: a class that autoloads is not the same as a provider
+    // Laravel has registered and booted.
+    $loaded = array_keys(app()->getLoadedProviders());
+    $themeProviders = array_values(array_filter($loaded, fn ($c) => str_starts_with($c, 'Theme\\')));
+    echo '  theme providers Laravel loaded   '.($themeProviders === [] ? '(none)' : implode(', ', $themeProviders))."\n";
+    echo '  app.debug                '.(config('app.debug') ? 'true' : 'false')."\n";
+    echo '  register_block_type()    '.(function_exists('register_block_type') ? 'available' : 'ABSENT')."\n";
+
     $all = array_keys(WP_Block_Type_Registry::get_instance()->get_all_registered());
-    $mine = array_values(array_filter($all, fn ($n) => ! str_starts_with($n, 'core/')));
-    echo '  non-core blocks in the registry  '.($mine === [] ? '(none)' : implode(', ', $mine))."\n";
+    $mine = array_values(array_filter(
+        $all,
+        fn ($n) => ! str_starts_with($n, 'core/') && ! str_starts_with($n, 'woocommerce/')
+    ));
+    echo '  blocks that are neither core nor woocommerce  '.($mine === [] ? '(none)' : implode(', ', $mine))."\n";
 
     echo "\n\033[31m1 check failed.\033[0m\n\n";
     exit(1);
