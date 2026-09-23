@@ -244,6 +244,35 @@ jobs:
         working-directory: site
         run: ddev exec wp eval-file theme-under-test/bin/ci/seed-shop.php
 
+      # The native block path had no coverage anywhere: this theme's own
+      # example block is an ACF one, and the theme ships no
+      # BlocksServiceProvider — so scaffolding a block, the Vite entry that
+      # adds, and the manifest lookup that turns it into a URL were exercised
+      # by nothing. That last link broke silently once already.
+      #
+      # --static is the plain Gutenberg shape: a save.jsx whose markup goes
+      # into post_content, and no `render` in block.json.
+      #
+      # develop only, for now. The fix that makes this pass — make:block
+      # writing the BlocksServiceProvider when the target has none — is on the
+      # framework's develop and not in the published beta, so the locked leg
+      # would fail for a reason already understood and already fixed. Drop the
+      # condition once that ships in a release.
+      - name: A classic React block scaffolds, builds and registers
+        if: matrix.framework == 'develop'
+        working-directory: site
+        run: |
+          ddev exec php artisan pollora:make:block ci-static \
+            --theme=apiary --static --no-interaction
+          # A precaution, not a diagnosis: a provider written after the site
+          # booted is only seen once discovery re-scans, and outside debug mode
+          # discovery is cached. Whether it is strictly required here has not
+          # been isolated — the block failed to register for a different reason
+          # when this was first written.
+          ddev exec php artisan discovery:clear
+          ddev exec bash -c 'cd themes/apiary && npm run build'
+          ddev exec wp eval-file theme-under-test/bin/ci/check-react-block.php apiary/ci-static
+
       # 40 checks: theme resolution, every anonymous page, a filled cart and
       # the checkout, the login screen, and wp-admin including the block
       # editor. An empty 200 fails — that is the failure mode this family of
