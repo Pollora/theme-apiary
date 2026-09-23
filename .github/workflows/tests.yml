@@ -166,23 +166,21 @@ jobs:
       # and create-project installs whatever the skeleton's lock pinned on the
       # day it was tagged, which drifts behind within weeks.
       #
-      # Pinned to 7.1.0 for now, deliberately: johnpbloch/wordpress-core 7.1.1
-      # ships without wp-includes. Measured on the published archive — 1129
-      # entries and 0 under wp-includes, against 4251 and 3122 for 7.1.0 — so
-      # 7.1.1 is not a WordPress that can boot, the framework's l10n patch has
-      # no file to apply to, and `wp core version` answers "This does not seem
-      # to be a WordPress installation". Nothing in this repository can fix
-      # that. Drop the constraint once upstream republishes.
+      # Unpinned again. johnpbloch/wordpress-core 7.1.1 shipped without
+      # wp-includes (1129 entries, 0 under wp-includes), so this was pinned to
+      # 7.1.0 for a day; 7.1.2 republished it complete (4251 and 3122, the
+      # same counts as 7.1.0). The completeness check below stays, so the next
+      # broken release is named where it happens.
       #
       # --no-scripts: this only replaces core files, and the skeleton's
       # post-autoload-dump hook runs `pollora:env:setup`, which opens a PDO
       # connection and falls back to interactive prompts when it cannot. In a
       # container with no TTY that throws, and composer exits 1 — a red build
       # that says nothing about WordPress, the theme, or anything else.
-      - name: Use the latest usable WordPress
+      - name: Use the latest WordPress
         working-directory: site
         run: |
-          ddev composer update johnpbloch/wordpress:7.1.0 --with-all-dependencies \
+          ddev composer update johnpbloch/wordpress --with-all-dependencies \
             --no-scripts --no-interaction --no-progress
 
       # An incomplete core fails forty lines later as an unapplied patch or a
@@ -191,7 +189,7 @@ jobs:
         working-directory: site
         run: |
           ddev exec test -f public/cms/wp-includes/l10n.php \
-            || { echo "::error::WordPress core is incomplete — wp-includes is missing. See the pin above."; exit 1; }
+            || { echo "::error::WordPress core is incomplete — wp-includes is missing. An upstream package shipped incomplete — see the history above."; exit 1; }
           ddev exec wp core version
 
       - name: Install WordPress
