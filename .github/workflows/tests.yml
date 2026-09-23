@@ -20,6 +20,53 @@ permissions:
   contents: read
 
 jobs:
+  # Properties of the files in this repository: no site, no container, no
+  # database. It answers in seconds, and it fails before the sweep spends five
+  # minutes building one.
+  contract:
+    name: Contract
+    runs-on: ubuntu-latest
+
+    if: github.repository == 'Pollora/theme-apiary'
+
+    steps:
+      - name: Checkout the theme
+        uses: actions/checkout@v6
+
+      # The bug this pins: vite.config.js globbed ./resources/blocks/ while the
+      # blocks live in resources/views/blocks/. Nothing failed — a build that
+      # matches no entry simply builds no entry — so every block asset a user
+      # added went unbundled, silently, and the dev-server refresh path watched
+      # a directory that does not exist.
+      - name: Vite looks for blocks where the blocks are
+        run: |
+          if [ ! -d resources/views/blocks ]; then
+            echo "::error file=vite.config.js::resources/views/blocks is missing"
+            exit 1
+          fi
+          if ! grep -q 'resources/views/blocks' vite.config.js; then
+            echo "::error file=vite.config.js::vite.config.js does not glob resources/views/blocks, so no block asset is bundled"
+            exit 1
+          fi
+          if grep -qE "['\"]\\./resources/blocks/" vite.config.js; then
+            echo "::error file=vite.config.js::vite.config.js still globs ./resources/blocks/, which does not exist in this theme"
+            exit 1
+          fi
+          echo "vite.config.js and the blocks agree on resources/views/blocks"
+
+      # requirements.json is read by `pollora:make:theme` when it offers to
+      # install a theme's requirements. It named wpackagist-plugin/woocommerce
+      # long after the skeleton moved to repo.wp-packages.org, where packages
+      # are wp-plugin/* — so the offer was followed by "Could not find a
+      # matching version".
+      - name: Requirements name packages that exist
+        run: |
+          if grep -q 'wpackagist-plugin/' requirements.json; then
+            echo "::error file=requirements.json::wpackagist-plugin/* cannot resolve on a 13.32 skeleton; use wp-plugin/*"
+            exit 1
+          fi
+          echo "requirements.json names packages the current skeleton can resolve"
+
   sweep:
     name: Sweep (framework ${{ matrix.framework }})
     runs-on: ubuntu-latest
