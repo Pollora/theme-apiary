@@ -54,22 +54,13 @@ if (! $type instanceof WP_Block_Type) {
 
     // Everything needed to tell which link of the chain broke, printed here
     // rather than guessed at from outside.
+    // The framework registers the theme's resources/views/blocks by
+    // convention since v13.32.0-beta.7: no provider is involved.
     $theme = get_stylesheet_directory();
-    $provider = $theme.'/app/Providers/BlocksServiceProvider.php';
     $blockDir = $theme.'/resources/views/blocks/'.basename(str_replace('/', '-', $blockName));
 
     echo "\n\033[1mWhere the chain stands\033[0m\n";
     echo '  theme directory          '.$theme."\n";
-    echo '  BlocksServiceProvider    '.(is_file($provider) ? 'present' : 'ABSENT')."\n";
-
-    if (is_file($provider)) {
-        $head = (string) file_get_contents($provider);
-        preg_match('/^namespace (.+);$/m', $head, $ns);
-        preg_match('/directory: (.+),$/m', $head, $dir);
-        echo '  its namespace            '.($ns[1] ?? '?')."\n";
-        echo '  the directory it scans   '.trim($dir[1] ?? '?')."\n";
-        echo '  class loadable           '.(class_exists(($ns[1] ?? '').'\\BlocksServiceProvider') ? 'yes' : 'NO')."\n";
-    }
 
     echo '  blocks directory         '.(is_dir(dirname($blockDir)) ? implode(', ', array_diff(scandir(dirname($blockDir)), ['.', '..'])) : 'ABSENT')."\n";
 
