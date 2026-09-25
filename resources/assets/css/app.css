@@ -16,6 +16,12 @@
 @import './frontend/components/wc-blocks.css';
 @import './frontend/layout/single-product.css';
 
+/* Alpine removes x-cloak once it has initialised an element. Until then,
+   whatever it hides with x-show stays hidden instead of flashing on load. */
+[x-cloak] {
+    display: none !important;
+}
+
 @theme {
     /* Primary action color — buttons, links, active states */
     --color-primary: var(--wp--preset--color--primary, #1f2937);
