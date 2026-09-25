@@ -220,25 +220,3 @@ if (typeof jQuery !== 'undefined' && document.querySelector('.woocommerce-cart-f
         }, 600);
     });
 }
-
-// ─── Cart badge visibility ───
-const badge = document.querySelector('.cart-badge');
-const count = document.querySelector('.cart-count');
-
-if (badge && count) {
-    const updateBadge = () => {
-        const value = parseInt(count.textContent, 10) || 0;
-        badge.classList.toggle('flex', value > 0);
-        badge.classList.toggle('hidden', value === 0);
-    };
-
-    const badgeObserver = new MutationObserver(updateBadge);
-    badgeObserver.observe(count, {
-        childList: true,
-        characterData: true,
-        subtree: true,
-    });
-
-    // Cleanup on turbo/SPA navigation if applicable
-    document.addEventListener('turbo:before-render', () => badgeObserver.disconnect(), { once: true });
-}
