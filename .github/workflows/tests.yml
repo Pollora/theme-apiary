@@ -247,19 +247,29 @@ jobs:
       # that adds, and the manifest lookup that turns it into a URL were
       # exercised by nothing. That last link broke silently once already.
       #
-      # --static is the plain Gutenberg shape: a save.jsx whose markup goes
-      # into post_content, and no `render` in block.json.
+      # One block of each shape: --static is the plain Gutenberg one, a
+      # save.jsx whose markup goes into post_content; the default is dynamic,
+      # rendered by render.blade.php on every request.
       #
-      # Both legs since framework v13.32.0-beta.7, where the framework
-      # registers every theme's resources/views/blocks itself: make:block no
-      # longer writes a BlocksServiceProvider, and none is needed.
-      - name: A classic React block scaffolds, builds and registers
+      # Checked over HTTP, not with `wp eval-file`. Until framework
+      # v13.32.0-beta.7 blocks were registered under WP-CLI only, and the
+      # WP-CLI check passed while the editor, the page and the REST API had
+      # none. The dynamic block is what caught parts/content printing
+      # get_the_content(), which runs no the_content filter and so renders no
+      # dynamic block at all.
+      - name: The theme's blocks scaffold, build, register and render
         working-directory: site
         run: |
           ddev exec php artisan pollora:make:block ci-static \
             --theme=apiary --static --no-interaction
+          ddev exec php artisan pollora:make:block ci-dynamic \
+            --theme=apiary --title="CI dynamic" --no-interaction
           ddev exec bash -c 'cd themes/apiary && npm run build'
-          ddev exec wp eval-file theme-under-test/bin/ci/check-react-block.php apiary/ci-static
+          ddev exec php theme-under-test/bin/ci/check-blocks.php \
+            --url=https://apiary-ci.ddev.site \
+            --static=apiary/ci-static \
+            --dynamic=apiary/ci-dynamic \
+            --dynamic-text="CI dynamic"
 
       # 40 checks: theme resolution, every anonymous page, a filled cart and
       # the checkout, the login screen, and wp-admin including the block

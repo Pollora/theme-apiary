@@ -22,7 +22,9 @@
     </header>
     {!! post_thumbnail() !!}
     <div class="entry-content prose max-w-none">
-        {!! get_the_content(sprintf(
+        {{-- the_content(), not get_the_content(): blocks are rendered by the
+             the_content filter, so without it a dynamic block renders nothing. --}}
+        @php(the_content(sprintf(
             wp_kses(
                 __('Continue reading<span class="screen-reader-text"> "%s"</span>', '%theme_name%'),
                 [
@@ -32,7 +34,7 @@
                 ]
             ),
             get_the_title()
-        )) !!}
+        )))
         {!!
             wp_link_pages([
                 'before' => '<div class="page-links">'.esc_html__('Pages:', '%theme_name%'),
