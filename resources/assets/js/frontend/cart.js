@@ -79,6 +79,12 @@ const ajaxAddToCart = (form, btn) => {
     setButtonLoading(btn, true);
 
     const formData = new FormData(form);
+    // FormData(form) leaves out the button that submitted the form, and on a
+    // simple product that button is what carries add-to-cart=<id>: without it
+    // WooCommerce adds nothing, while this still announces success.
+    if (btn?.name && !formData.has(btn.name)) {
+        formData.set(btn.name, btn.value);
+    }
     if (!formData.has('add-to-cart') && formData.has('product_id')) {
         formData.set('add-to-cart', formData.get('product_id'));
     }
