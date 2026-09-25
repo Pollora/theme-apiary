@@ -282,6 +282,58 @@ jobs:
             php theme-under-test/bin/tests/sweep.php --url=https://apiary-ci.ddev.site
           '
 
+      # The sweep reads HTML; these use the theme in a browser — a product added from its
+      # page, a variation chosen, the editor canvas. They run on the framework's E2E
+      # harness at the version this site installed: its tag on the locked leg, develop on
+      # the other, so a harness change is measured with the framework that brings it.
+      - name: Fetch the framework's browser test harness
+        working-directory: site
+        run: |
+          version=$(ddev composer show pollora/framework --format=json | jq -r '.versions[0]')
+          ref=$([ "$version" = "dev-develop" ] && echo develop || echo "$version")
+          echo "Harness from pollora/framework@$ref"
+          git clone --quiet --depth 1 --branch "$ref" https://github.com/Pollora/framework.git ../framework
+          mkdir -p ../framework/tests/e2e/specs/apiary
+          cp ../theme/bin/tests/e2e/*.spec.ts ../framework/tests/e2e/specs/apiary/
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: '22'
+
+      - name: Install the browser tests
+        working-directory: framework/tests/e2e
+        run: |
+          npm ci
+          npx playwright install --with-deps chromium
+
+      - name: Trust the site's certificate
+        run: |
+          if command -v mkcert >/dev/null && [ -f "$(mkcert -CAROOT)/rootCA.pem" ]; then
+            echo "NODE_EXTRA_CA_CERTS=$(mkcert -CAROOT)/rootCA.pem" >> "$GITHUB_ENV"
+          else
+            echo "::warning::No mkcert authority on the runner; certificate checks are off for this disposable site"
+            echo "NODE_TLS_REJECT_UNAUTHORIZED=0" >> "$GITHUB_ENV"
+          fi
+
+      - name: Browser tests
+        working-directory: framework/tests/e2e
+        env:
+          E2E_HOME_URL: https://apiary-ci.ddev.site
+          E2E_SITE_DIR: ${{ github.workspace }}/site
+          E2E_RUN_ID: ${{ github.run_id }}
+        run: npx playwright test specs/apiary
+
+      - name: Upload the browser test report
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: e2e-report-${{ matrix.framework }}
+          path: |
+            framework/tests/e2e/playwright-report
+            framework/tests/e2e/test-results
+          if-no-files-found: ignore
+
       - name: Laravel log
         if: failure()
         working-directory: site
