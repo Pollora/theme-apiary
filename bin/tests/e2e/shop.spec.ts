@@ -84,8 +84,13 @@ test('a simple product goes from its page to the cart and the checkout', async (
 
     await page.goto(simple.permalink);
     await expect(page.locator('h1.product_title')).toHaveText(simpleName);
+    await expect(page.locator('.cart-badge'), 'the header badge starts hidden on an empty cart').toBeHidden();
     await page.locator('form.cart .single_add_to_cart_button').click();
     await expectCartLines(page, 1);
+
+    // Without a reload: the badge comes back as a WooCommerce fragment.
+    await expect(page.locator('.cart-badge')).toBeVisible();
+    await expect(page.locator('.cart-badge .cart-count')).toHaveText('1');
 
     // Scoped to the cart itself: an empty cart lists new products, this one among them.
     await page.goto(cartUrl);
