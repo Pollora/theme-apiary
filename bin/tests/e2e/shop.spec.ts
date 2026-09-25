@@ -8,10 +8,14 @@ import { homeUrl, runId, wp } from '../../support/site';
  */
 
 type Product = { id: number; name: string; permalink: string };
+type Category = { id: number; slug: string };
 
 const simpleName = `E2E simple ${runId}`;
 const variableName = `E2E variable ${runId}`;
 const products: number[] = [];
+
+// A category holding only this run's products: its archive is a product grid the test controls.
+let category: Category;
 
 // The cart and checkout slugs follow the site's language.
 const cartUrl = wp('eval', 'echo wc_get_page_permalink("cart");');
@@ -42,10 +46,12 @@ function watchErrors(page: Page): string[] {
 }
 
 test.beforeAll(async ({ requestUtils }) => {
+    category = await requestUtils.rest({ method: 'POST', path: '/wc/v3/products/categories', data: { name: `E2E category ${runId}` } });
+
     simple = await requestUtils.rest({
         method: 'POST',
         path: '/wc/v3/products',
-        data: { name: simpleName, type: 'simple', regular_price: '12.00', status: 'publish' },
+        data: { name: simpleName, type: 'simple', regular_price: '12.00', status: 'publish', categories: [{ id: category.id }] },
     });
     products.push(simple.id);
 
@@ -74,6 +80,10 @@ test.afterAll(async ({ requestUtils }) => {
     for (const id of products) {
         await requestUtils.rest({ method: 'DELETE', path: `/wc/v3/products/${id}`, params: { force: true } });
     }
+
+    if (category) {
+        await requestUtils.rest({ method: 'DELETE', path: `/wc/v3/products/categories/${category.id}`, params: { force: true } });
+    }
 });
 
 // A fresh visitor per test: the cart lives in the session cookie.
@@ -99,6 +109,22 @@ test('a simple product goes from its page to the cart and the checkout', async (
     await page.goto(checkoutUrl);
     await expect(page.locator(checkout).first()).toContainText(simpleName, { timeout: 15_000 });
     await expect(page.locator('#billing_first_name, .wc-block-checkout').first()).toBeVisible();
+
+    expect(errors, 'no uncaught page error').toEqual([]);
+});
+
+test('a product added from a product grid updates the header badge', async ({ page }) => {
+    const errors = watchErrors(page);
+
+    await page.goto(wp('eval', `echo get_term_link(${category.id}, "product_cat");`));
+    await expect(page.locator('.cart-badge'), 'the header badge starts hidden on an empty cart').toBeHidden();
+
+    await page.locator(`a.ajax_add_to_cart[data-product_id="${simple.id}"]`).click();
+    await expectCartLines(page, 1);
+
+    // Without a reload: WooCommerce applies the fragments after its Ajax add.
+    await expect(page.locator('.cart-badge')).toBeVisible();
+    await expect(page.locator('.cart-badge .cart-count')).toHaveText('1');
 
     expect(errors, 'no uncaught page error').toEqual([]);
 });
