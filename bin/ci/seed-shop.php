@@ -34,6 +34,16 @@ if (wc_get_page_id('shop') <= 0 || wc_get_page_id('cart') <= 0 || wc_get_page_id
     echo "  → WooCommerce pages created\n";
 }
 
+// A new shop starts in "coming soon" mode: WC_Install::add_coming_soon_option()
+// runs on the first wp-admin request and serves the cart and checkout to
+// visitors as a placeholder page. The sweep only visited wp-admin after its
+// cart checks, so nothing showed it — until the block check, which opens the
+// editor first, turned the cart and checkout red. That runs add_option(), so
+// a value set here stands. The shop the sweep walks is a launched one.
+update_option('woocommerce_coming_soon', 'no');
+update_option('woocommerce_store_pages_only', 'no');
+echo "  → shop launched (not in coming soon mode)\n";
+
 $categorySlug = 'ci-category';
 $term = get_term_by('slug', $categorySlug, 'product_cat');
 
