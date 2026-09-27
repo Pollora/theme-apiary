@@ -15,18 +15,15 @@ async function canvasColor(admin: { createNewPost: () => Promise<void> }, editor
     );
 }
 
-test("the theme's palette reaches the editor canvas", async ({ admin, editor }) => {
-    expect(await canvasColor(admin, editor, 'red-500'), 'a scale colour of theme.json').not.toBe('');
+test("the theme's palette reaches the editor canvas, and Tailwind's scale does not", async ({ admin, editor }) => {
+    expect(await canvasColor(admin, editor, 'surface'), 'a colour of the theme').not.toBe('');
+    // The palette once held Tailwind's whole default scale, some 290 colours, offered to authors.
+    expect(await canvasColor(admin, editor, 'red-500'), 'a colour of the Tailwind scale').toBe('');
 });
 
 test('the semantic colours of the palette have a value', async ({ admin, editor }) => {
-    // Known defect: theme.json declares primary as var(--wp--preset--color--primary, #1f2937),
-    // a variable defined as itself, which CSS discards as a cycle. The same holds for accent,
-    // foreground, muted, subtle, surface, surface-alt, outline, ring and primary-hover: a block
-    // coloured "Primary" gets a transparent background, in the editor and on the page.
-    // This passes, and is reported as such, once the palette resolves.
-    test.fail(true, 'theme.json semantic colours reference themselves');
-
+    // theme.json once declared primary as var(--wp--preset--color--primary, #1f2937), a variable
+    // defined as itself, which CSS discards as a cycle: a block coloured "Primary" was transparent.
     expect(await canvasColor(admin, editor, 'primary')).not.toBe('');
 });
 

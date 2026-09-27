@@ -108,19 +108,6 @@ export default defineConfig({
                 }
             },
         },
-        {
-            name: "copy-theme-json",
-            apply: "build",
-            async writeBundle(options) {
-                const fs = await import('fs/promises');
-                const src = path.join(options.dir, 'assets', 'theme.json');
-                const dest = path.resolve(__dirname, 'theme.json');
-                try {
-                    await fs.copyFile(src, dest);
-                    console.log('  ✓ theme.json copied to theme root');
-                } catch {}
-            },
-        },
     ],
     ...getDevServerConfig()
 });
