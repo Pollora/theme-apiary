@@ -162,3 +162,20 @@ test('a product search finds the product', async ({ page }) => {
 
     expect(errors, 'no uncaught page error').toEqual([]);
 });
+
+test('each shop page has one main landmark', async ({ page }) => {
+    // The layout opens main#main; WooCommerce's default content wrapper opened a second one
+    // inside it, with the same id, on every page it renders.
+    const pages = {
+        'product grid': wp('eval', `echo get_term_link(${category.id}, "product_cat");`),
+        'product page': simple.permalink,
+        'product search': homeUrl('/?s=E2E&post_type=product'),
+        cart: cartUrl,
+    };
+
+    for (const [name, url] of Object.entries(pages)) {
+        await page.goto(url);
+        await expect(page.locator('main'), `${name}: main elements`).toHaveCount(1);
+        await expect(page.locator('[id="main"]'), `${name}: elements with id="main"`).toHaveCount(1);
+    }
+});

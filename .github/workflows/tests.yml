@@ -289,8 +289,9 @@ jobs:
       - name: Fetch the framework's browser test harness
         working-directory: site
         run: |
-          version=$(ddev composer show pollora/framework --format=json | jq -r '.versions[0]')
-          ref=$([ "$version" = "dev-develop" ] && echo develop || echo "$version")
+          # develop is aliased (13.x-dev), so dev-develop is not always the first version listed.
+          ref=$(ddev composer show pollora/framework --format=json \
+            | jq -r '.versions | if index("dev-develop") then "develop" else .[0] end')
           echo "Harness from pollora/framework@$ref"
           git clone --quiet --depth 1 --branch "$ref" https://github.com/Pollora/framework.git ../framework
           mkdir -p ../framework/tests/e2e/specs/apiary
