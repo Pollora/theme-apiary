@@ -95,6 +95,29 @@ export default defineConfig({
         laravel(getThemeConfig()),
         wordpressThemeJson({
             baseThemeJsonPath: './theme.json',
+            fontLabels: {
+                sans: 'Sans Serif',
+                mono: 'Monospace',
+            },
+            fontSizeLabels: {
+                xs: 'Extra Small',
+                sm: 'Small',
+                base: 'Medium',
+                lg: 'Large',
+                xl: 'Extra Large',
+                '2xl': '2X Large',
+                '3xl': '3X Large',
+                '4xl': '4X Large',
+                '5xl': '5X Large',
+            },
+            borderRadiusLabels: {
+                xs: 'Extra Small',
+                sm: 'Small',
+                md: 'Medium',
+                lg: 'Large',
+                xl: 'Extra Large',
+                '2xl': '2X Large',
+            },
         }),
         ...(hasBlocks ? [wordpressPlugin()] : []),
         {
@@ -106,19 +129,6 @@ export default defineConfig({
                         path: "*",
                     });
                 }
-            },
-        },
-        {
-            name: "copy-theme-json",
-            apply: "build",
-            async writeBundle(options) {
-                const fs = await import('fs/promises');
-                const src = path.join(options.dir, 'assets', 'theme.json');
-                const dest = path.resolve(__dirname, 'theme.json');
-                try {
-                    await fs.copyFile(src, dest);
-                    console.log('  ✓ theme.json copied to theme root');
-                } catch {}
             },
         },
     ],
