@@ -81,6 +81,25 @@ always offer the same palette and sizes.
 See [Theme.json and Vite Build Integration](https://pollora.dev/theming/theme-structure/)
 for the details.
 
+## Gutenberg design system
+
+Every core block is styled in `theme.json` (`styles`: root, elements, blocks),
+from the design tokens only, so a paragraph, a quote, a table or a button look
+the same in the editor and on the page. Content is no longer styled by
+Tailwind Typography (`prose`); product descriptions still are.
+
+- Reference presets by the name WordPress prints: `2xl` becomes
+  `var(--wp--preset--font-size--2-xl)`. Never a Tailwind variable: it does not
+  exist in the editor. A block's `css` takes one selector per rule.
+- Links are styled inside content blocks (paragraph, list, table, verse), not
+  globally, so WooCommerce and the templates keep their own link styles.
+- `app/Cms/StyleLayers.php` puts WordPress's CSS in cascade layers, declared at
+  the top of `app.css`: `theme, base, wp-core, wp, components, utilities`. The
+  block library and the global styles beat Tailwind's reset, and a Tailwind
+  class always beats them.
+- `php bin/tests/design-system.php` (run in CI) checks that every preset and
+  custom variable the styles use exists.
+
 ## Configuration
 
 All theme behavior is driven by config files in `config/`:

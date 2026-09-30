@@ -21,7 +21,7 @@
         @endif
     </header>
     {!! post_thumbnail() !!}
-    <div class="entry-content prose max-w-none">
+    <div class="entry-content is-layout-flow">
         {{-- the_content(), not get_the_content(): blocks are rendered by the
              the_content filter, so without it a dynamic block renders nothing. --}}
         @php(the_content(sprintf(

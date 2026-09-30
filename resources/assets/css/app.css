@@ -1,3 +1,10 @@
+/*
+ * WordPress's block library and theme.json styles sit between Tailwind's reset
+ * and its utilities (app/Cms/StyleLayers.php): theme.json styles every block,
+ * a utility class still wins in the Blade templates.
+ */
+@layer theme, base, wp-core, wp, components, utilities;
+
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
