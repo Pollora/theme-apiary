@@ -67,6 +67,13 @@ jobs:
           fi
           echo "requirements.json names packages the current skeleton can resolve"
 
+      # theme.json styles every core block. WordPress drops a style whose
+      # variable does not exist without a word: a preset named by its raw slug
+      # (5xl where WordPress prints 5-xl), a Tailwind variable the editor never
+      # loads, a block css selector list it breaks apart.
+      - name: The design system points at what exists
+        run: php bin/tests/design-system.php
+
   sweep:
     name: Sweep (framework ${{ matrix.framework }})
     runs-on: ubuntu-latest
