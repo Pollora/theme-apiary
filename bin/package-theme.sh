@@ -103,7 +103,8 @@ find "$TARGET_DIR" -type f \
             -e "s|Description: WooCommerce Theme based on Tailwind UI|Description: %theme_description%|g" \
             -e "s|Author: AmphiBee|Author: %theme_author%|g" \
             -e "s|Author URI: https://pollora.dev|Author URI: %theme_author_uri%|g" \
-            -e "s|Version: [0-9.]*|Version: %theme_version%|g" \
+            -e "s|^Version: [0-9.]*|Version: %theme_version%|" \
+            -e "s|— ${CODE_NAME} theme overrides|— %theme_name% theme overrides|g" \
             -e "s|'appName' => '${CODE_STUDLY}'|'appName' => '%theme_name%'|g" \
             -e "s|'appShortName' => '${CODE_STUDLY}'|'appShortName' => '%theme_name%'|g" \
             -e "s|${CODE_CAMEL}Cart|%theme_camel%Cart|g" \
