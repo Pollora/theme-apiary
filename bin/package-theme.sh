@@ -42,17 +42,43 @@ rsync -av --delete \
     --exclude='.claude' \
     --exclude='package-theme.sh' \
     --exclude='bin/' \
-    --exclude='README.md' \
     --exclude='languages/*.mo' \
     --exclude='screenshot.png' \
     --exclude='tailwind.safelist.txt' \
+    --exclude='/README.md' \
+    --exclude='/.github/' \
+    --exclude='/LICENSE' \
+    --exclude='/license.txt' \
     "$SOURCE/" "$TARGET_DIR/" \
     --quiet
+
+# package.json comes from the development copy, which declares no license (or
+# another one): the template's is GPL-2.0-or-later, the same as LICENSE.
+echo "Setting the package.json license to GPL-2.0-or-later..."
+node -e '
+const fs = require("fs");
+const [file, license] = process.argv.slice(1);
+const pkg = JSON.parse(fs.readFileSync(file, "utf8"));
+let out = pkg;
+if ("license" in pkg) {
+    pkg.license = license;
+} else {
+    out = {};
+    for (const [key, value] of Object.entries(pkg)) {
+        out[key] = value;
+        if (key === "private") out.license = license;
+    }
+    if (!("license" in out)) out.license = license;
+}
+fs.writeFileSync(file, JSON.stringify(out, null, 4) + "\n");
+' "$TARGET_DIR/package.json" "GPL-2.0-or-later"
 
 echo "Replacing code name with placeholders..."
 
 find "$TARGET_DIR" -type f \
     -not -path "*/.git/*" \
+    -not -path "*/.github/*" \
+    -not -path "*/bin/*" \
     -not -path "*/node_modules/*" \
     -not -name "package-theme.sh" \
     -not -name "README.md" \
