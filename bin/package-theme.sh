@@ -45,6 +45,8 @@ rsync -av --delete \
     --exclude='README.md' \
     --exclude='languages/*.mo' \
     --exclude='screenshot.png' \
+    --exclude='LICENSE' \
+    --exclude='license.txt' \
     --exclude='tailwind.safelist.txt' \
     "$SOURCE/" "$TARGET_DIR/" \
     --quiet
