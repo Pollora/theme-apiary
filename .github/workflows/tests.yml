@@ -44,7 +44,13 @@ jobs:
             echo "::error file=vite.config.js::resources/views/blocks is missing"
             exit 1
           fi
-          if ! grep -q 'resources/views/blocks' vite.config.js; then
+          # @pollora/vite-config globs resources/views/blocks itself, unless told `blocks: false`
+          if grep -q '@pollora/vite-config' vite.config.js; then
+            if grep -qE 'blocks:[[:space:]]*false' vite.config.js; then
+              echo "::error file=vite.config.js::vite.config.js passes blocks: false to @pollora/vite-config, so no block asset is bundled"
+              exit 1
+            fi
+          elif ! grep -q 'resources/views/blocks' vite.config.js; then
             echo "::error file=vite.config.js::vite.config.js does not glob resources/views/blocks, so no block asset is bundled"
             exit 1
           fi
