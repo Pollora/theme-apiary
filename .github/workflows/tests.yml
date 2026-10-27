@@ -236,6 +236,21 @@ jobs:
           ddev exec wp plugin activate woocommerce
           ddev exec wp plugin get woocommerce --field=version
 
+      # Framework 13.39 moved its WooCommerce integration to pollora/woocommerce, which
+      # requirements.json also declares. The scaffolder's prompt cannot be answered here,
+      # so the package is required explicitly, but only when the framework this leg
+      # installed no longer ships the integration: on a framework that does, the package
+      # would pull it up to 13.39 and the locked leg would stop measuring what it names.
+      - name: Install pollora/woocommerce when the framework no longer ships it
+        working-directory: site
+        run: |
+          if ddev exec test -d vendor/pollora/framework/src/ThirdParty/WooCommerce; then
+            echo "This framework ships the WooCommerce integration: pollora/woocommerce is not needed."
+          else
+            ddev composer require pollora/woocommerce --no-interaction --no-progress
+            ddev composer show pollora/woocommerce | grep -E '^(name|versions)'
+          fi
+
       # The scaffolder can only download a tag, so without --source this job
       # would measure the last release and report it as the branch being green.
       - name: Place the commit under test where the container can reach it
