@@ -13,7 +13,7 @@ declare(strict_types=1);
  * test onto a theme the scaffolder generated from the published tag — without
  * the substitution, CI would install a theme whose header is a placeholder.
  *
- * @return array<string, string>  placeholder => a plausible substituted value
+ * @return array<string, string> placeholder => a plausible substituted value
  */
 function scaffolderReplacements(string $slug = 'apiary'): array
 {

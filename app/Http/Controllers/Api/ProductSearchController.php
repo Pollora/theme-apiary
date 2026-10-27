@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace %theme_namespace%\Http\Controllers\Api;
 
+use %theme_namespace%\Services\ProductSearchService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use %theme_namespace%\Services\ProductSearchService;
 
 /**
  * Product search suggestions API endpoint.
@@ -20,7 +20,7 @@ use %theme_namespace%\Services\ProductSearchService;
  * - `max_results` (int): maximum products returned (default: 6)
  * - `debounce` (int): client-side debounce in ms (default: 300)
  *
- * @see \%theme_namespace%\Services\ProductSearchService  Weighted search logic
+ * @see ProductSearchService  Weighted search logic
  * @see resources/assets/js/frontend/product-search.js  Alpine.js client component
  *
  * @route GET /api/products/search?q={query}
@@ -33,8 +33,8 @@ class ProductSearchController
      * Returns an empty array if the query is shorter than the configured
      * minimum, or delegates to {@see ProductSearchService} for ranked results.
      *
-     * @param  Request               $request  Expects a `q` query parameter.
-     * @param  ProductSearchService  $search   Injected via Laravel's service container.
+     * @param  Request  $request  Expects a `q` query parameter.
+     * @param  ProductSearchService  $search  Injected via Laravel's service container.
      * @return JsonResponse Array of product objects `{id, title, url, image, price}`.
      */
     public function __invoke(Request $request, ProductSearchService $search): JsonResponse

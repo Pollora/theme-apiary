@@ -51,7 +51,7 @@ class PageTitle
     public function registerMetaBox(): void
     {
         add_meta_box(
-            '%theme_name%_hide_page_title',
+            '%theme_name_%hide_page_title',
             __('Page title', '%theme_name%'),
             [$this, 'renderMetaBox'],
             'page',
@@ -76,7 +76,7 @@ class PageTitle
             $checked = ! apply_filters('theme/page/default_show_title', true, $post->ID);
         }
 
-        wp_nonce_field('%theme_name%_hide_page_title', '%theme_name%_hide_page_title_nonce');
+        wp_nonce_field('%theme_name_%hide_page_title', '%theme_name_%hide_page_title_nonce');
         printf(
             '<label><input type="checkbox" name="%s" value="1" %s /> %s</label>',
             esc_attr(self::META_KEY),
@@ -95,8 +95,8 @@ class PageTitle
     public function saveMetaBox(int $postId): void
     {
         if (
-            ! isset($_POST['%theme_name%_hide_page_title_nonce'])
-            || ! wp_verify_nonce($_POST['%theme_name%_hide_page_title_nonce'], '%theme_name%_hide_page_title')
+            ! isset($_POST['%theme_name_%hide_page_title_nonce'])
+            || ! wp_verify_nonce($_POST['%theme_name_%hide_page_title_nonce'], '%theme_name_%hide_page_title')
         ) {
             return;
         }

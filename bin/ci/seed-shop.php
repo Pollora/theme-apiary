@@ -20,8 +20,7 @@
  * statement of a script. Adding it back fails the seed with
  * "strict_types declaration must be the very first statement in the script".
  */
-
-if (! class_exists(\WooCommerce::class)) {
+if (! class_exists(WooCommerce::class)) {
     fwrite(STDERR, "WooCommerce is not loaded — activate it before seeding.\n");
     exit(1);
 }
@@ -30,7 +29,7 @@ if (! class_exists(\WooCommerce::class)) {
 // site nobody has opened in a browser the shop, cart and checkout pages can
 // still be missing. The sweep asks for all three by permalink.
 if (wc_get_page_id('shop') <= 0 || wc_get_page_id('cart') <= 0 || wc_get_page_id('checkout') <= 0) {
-    \WC_Install::create_pages();
+    WC_Install::create_pages();
     echo "  → WooCommerce pages created\n";
 }
 

@@ -39,18 +39,18 @@ class AssetServiceProvider extends ServiceProvider
 
             $data = [
                 'addToCartConfirmation' => $confirmationEnabled,
-                'cartUrl'     => function_exists('wc_get_cart_url') ? wc_get_cart_url() : '',
+                'cartUrl' => function_exists('wc_get_cart_url') ? wc_get_cart_url() : '',
                 'checkoutUrl' => function_exists('wc_get_checkout_url') ? wc_get_checkout_url() : '',
                 'i18n' => [
-                    'addedToCart'      => __('%s added to cart.', '%theme_name%'),
-                    'productAdded'     => __('Product added to cart.', '%theme_name%'),
-                    'dismiss'          => __('Dismiss', '%theme_name%'),
+                    'addedToCart' => __('%s added to cart.', '%theme_name%'),
+                    'productAdded' => __('Product added to cart.', '%theme_name%'),
+                    'dismiss' => __('Dismiss', '%theme_name%'),
                     'addedToCartTitle' => __('Added to cart', '%theme_name%'),
-                    'viewCart'         => __('View cart', '%theme_name%'),
+                    'viewCart' => __('View cart', '%theme_name%'),
                     'continueShopping' => __('Continue shopping', '%theme_name%'),
-                    'checkout'         => __('Checkout', '%theme_name%'),
-                    'recentlyViewed'   => __('Recently viewed', '%theme_name%'),
-                    'youMayAlsoLike'   => __('You may also like', '%theme_name%'),
+                    'checkout' => __('Checkout', '%theme_name%'),
+                    'recentlyViewed' => __('Recently viewed', '%theme_name%'),
+                    'youMayAlsoLike' => __('You may also like', '%theme_name%'),
                 ],
             ];
 
@@ -58,36 +58,37 @@ class AssetServiceProvider extends ServiceProvider
                 $product = wc_get_product(get_the_ID());
                 if ($product) {
                     $data['currentProduct'] = [
-                        'id'           => $product->get_id(),
-                        'name'         => $product->get_name(),
-                        'price'        => $product->get_price_html(),
-                        'image'        => wp_get_attachment_url($product->get_image_id()) ?: wc_placeholder_img_src(),
-                        'description'  => $product->get_short_description(),
-                        'url'          => get_permalink(),
+                        'id' => $product->get_id(),
+                        'name' => $product->get_name(),
+                        'price' => $product->get_price_html(),
+                        'image' => wp_get_attachment_url($product->get_image_id()) ?: wc_placeholder_img_src(),
+                        'description' => $product->get_short_description(),
+                        'url' => get_permalink(),
                         'crossSellIds' => $product->get_cross_sell_ids(),
-                        'upsellIds'    => $product->get_upsell_ids(),
+                        'upsellIds' => $product->get_upsell_ids(),
                     ];
                 }
             }
 
-            echo '<script>window.%theme_camel%Cart = ' . wp_json_encode($data) . ';</script>' . "\n";
+            echo '<script>window.%theme_camel%Cart = '.wp_json_encode($data).';</script>'."\n";
 
             // Search suggestions config
             $searchConfig = config('theme.woocommerce.search', []);
             if (! empty($searchConfig['suggestions'])) {
                 $searchData = [
-                    'apiUrl'     => home_url('/api/products/search'),
-                    'minChars'   => (int) ($searchConfig['min_chars'] ?? 3),
-                    'debounce'   => (int) ($searchConfig['debounce'] ?? 300),
+                    'apiUrl' => home_url('/api/products/search'),
+                    'minChars' => (int) ($searchConfig['min_chars'] ?? 3),
+                    'debounce' => (int) ($searchConfig['debounce'] ?? 300),
                     'maxResults' => (int) ($searchConfig['max_results'] ?? 6),
                 ];
-                echo '<script>window.%theme_camel%Search = ' . wp_json_encode($searchData) . ';</script>' . "\n";
+                echo '<script>window.%theme_camel%Search = '.wp_json_encode($searchData).';</script>'."\n";
             }
         }, 1);
 
         // Remove default WooCommerce styles
         Filter::add('woocommerce_enqueue_styles', function (array $enqueueStyles) {
             unset($enqueueStyles['woocommerce-general'], $enqueueStyles['woocommerce-layout'], $enqueueStyles['woocommerce-smallscreen']);
+
             return $enqueueStyles;
         });
     }

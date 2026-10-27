@@ -14,7 +14,6 @@ declare(strict_types=1);
  * `css` rule written as a selector list, which WordPress breaks apart. None of
  * it errors; the block just looks wrong in the editor or on the page.
  */
-
 $root = dirname(__DIR__, 2);
 $failures = 0;
 
@@ -44,7 +43,7 @@ function wpKebab(string $slug): string
 }
 
 /**
- * @return array<string, list<string>>  preset kind => CSS-variable slugs WordPress will print
+ * @return array<string, list<string>> preset kind => CSS-variable slugs WordPress will print
  */
 function designSystemPresets(array $themeJson): array
 {
@@ -87,7 +86,7 @@ function designSystemPresets(array $themeJson): array
 }
 
 /**
- * @return list<string>  the --wp--custom-- variables settings.custom defines
+ * @return list<string> the --wp--custom-- variables settings.custom defines
  */
 function designSystemCustomVariables(array $custom, string $prefix = ''): array
 {

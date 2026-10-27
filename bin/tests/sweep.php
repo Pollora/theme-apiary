@@ -30,7 +30,6 @@ declare(strict_types=1);
  * else is written: no order is placed, because that sends mail and leaves
  * records behind. The funnel is walked as far as the page that would submit.
  */
-
 $options = getopt('', ['url::', 'keep-user']);
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -52,7 +51,7 @@ function test(string $name, callable $fn): void
 
     try {
         $result = $fn();
-    } catch (\Throwable $e) {
+    } catch (Throwable $e) {
         echo "  \033[31m✗\033[0m  {$name} — {$e->getMessage()}\n";
         $failed++;
 
@@ -78,7 +77,7 @@ function run(string $command): array
     $process = proc_open($command.' 2>&1', $descriptors, $pipes);
 
     if (! is_resource($process)) {
-        throw new \RuntimeException("could not run: {$command}");
+        throw new RuntimeException("could not run: {$command}");
     }
 
     $out = stream_get_contents($pipes[1]) ?: '';
@@ -93,7 +92,7 @@ function wpEval(string $php): string
     $result = run('wp eval '.escapeshellarg($php));
 
     if ($result['code'] !== 0) {
-        throw new \RuntimeException("wp eval failed: {$result['out']}");
+        throw new RuntimeException("wp eval failed: {$result['out']}");
     }
 
     return $result['out'];
@@ -150,7 +149,7 @@ final class Browser
         curl_close($ch);
 
         if ($error !== '') {
-            throw new \RuntimeException("{$url}: {$error}");
+            throw new RuntimeException("{$url}: {$error}");
         }
 
         return ['status' => $status, 'body' => is_string($body) ? $body : '', 'url' => $final];
@@ -266,7 +265,7 @@ test('apiary is listed by wp_get_themes()', function () use ($stylesheet) {
 
     return in_array($stylesheet, $listed, true)
         ? true
-        : "apiary is absent from the themes list (".implode(', ', $listed).")";
+        : 'apiary is absent from the themes list ('.implode(', ', $listed).')';
 });
 
 // Fix 3 inverted the registration order so a theme's Blade views win over the
@@ -585,11 +584,11 @@ try {
     ];
 
     foreach ($screens as $label => $path) {
-        test("wp-admin: {$label}", function () use ($browser, $adminUrl, $path, $label) {
+        test("wp-admin: {$label}", function () use ($browser, $adminUrl, $path) {
             $response = $browser->visit($adminUrl.$path);
 
             if ($response['status'] === 404) {
-                return "answered 404 — the screen is not there on this install";
+                return 'answered 404 — the screen is not there on this install';
             }
 
             // wp-admin bounces to the login form when the session is gone,
@@ -606,7 +605,7 @@ try {
 
             return str_contains($response['body'], 'wp-admin')
                 ? true
-                : "the response is a document but does not look like wp-admin";
+                : 'the response is a document but does not look like wp-admin';
         });
     }
 
@@ -632,7 +631,7 @@ try {
 
         return str_contains($body, 'wp--preset--color') || str_contains($body, 'editor-styles-wrapper') || str_contains($body, 'apiary')
             ? true
-            : "nothing from the theme reached the editor — theme.json and add_editor_style are both silent there";
+            : 'nothing from the theme reached the editor — theme.json and add_editor_style are both silent there';
     });
 } finally {
     if (! isset($options['keep-user'])) {

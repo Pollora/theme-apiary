@@ -27,7 +27,6 @@ declare(strict_types=1);
  *
  * An administrator and a post are created for the run and deleted at the end.
  */
-
 $options = getopt('', ['url:', 'static:', 'dynamic:', 'dynamic-text:']);
 
 foreach (['url', 'static', 'dynamic', 'dynamic-text'] as $required) {
