@@ -1,5 +1,6 @@
 {
     "composer": {
-        "wp-plugin/woocommerce": "WooCommerce e-commerce plugin"
+        "wp-plugin/woocommerce": "WooCommerce e-commerce plugin",
+        "pollora/woocommerce": "Pollora's WooCommerce integration: Blade templates, route conditions and events"
     }
 }

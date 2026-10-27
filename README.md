@@ -2,7 +2,7 @@
 
 %theme_description%
 
-Built with [Pollora](https://pollora.dev) from the [Apiary](https://github.com/Pollora/theme-apiary) template: a WooCommerce storefront in Blade, Tailwind CSS v4 and Alpine.js. It needs the WooCommerce plugin, active.
+Built with [Pollora](https://pollora.dev) from the [Apiary](https://github.com/Pollora/theme-apiary) template: a WooCommerce storefront in Blade, Tailwind CSS v4 and Alpine.js. It needs the WooCommerce plugin, active, and [`pollora/woocommerce`](https://github.com/Pollora/woocommerce), which gives Pollora's Blade templates, `Route::wp()` conditions and events to WooCommerce (`make:theme` offers to install both).
 
 ## What's inside
 
