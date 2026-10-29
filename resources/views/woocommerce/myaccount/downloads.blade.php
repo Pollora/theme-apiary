@@ -24,7 +24,7 @@
     {{-- Empty state --}}
     <div class="rounded-xl border border-dashed border-outline bg-surface/50 py-12 text-center">
         @if (!empty($icons['empty-downloads']))
-            <span class="flex justify-center text-subtle">{!! $icons['empty-downloads'] !!}</span>
+            <span class="flex justify-center text-subtle">{!! $icons['empty-downloads'] !!}{{-- nosemgrep -- the theme's own SVG icon --}}</span>
         @endif
         <h3 class="mt-4 text-sm font-semibold text-foreground">@php esc_html_e( 'No downloads available yet.', 'woocommerce' ); @endphp</h3>
         <p class="mt-1 text-sm text-muted">@php esc_html_e( 'Your downloadable products will appear here after purchase.', 'woocommerce' ); @endphp</p>

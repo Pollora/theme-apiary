@@ -25,9 +25,9 @@ global $post;
 
 	<p>@php esc_html_e( 'To track your order please enter your Order ID in the box below and press the "Track" button. This was given to you on your receipt and in the confirmation email you should have received.', 'woocommerce' ); @endphp</p>
 
-	<p class="form-row form-row-first"><label for="orderid">@php esc_html_e( 'Order ID', 'woocommerce' ); @endphp</label> <input class="input-text" type="text" name="orderid" id="orderid" value="{!! isset( $_REQUEST['orderid'] ) ? esc_attr( wp_unslash( $_REQUEST['orderid'] ) ) : '' !!}" placeholder="@php esc_attr_e( 'Found in your order confirmation email.', 'woocommerce' ); @endphp" /></p>{{--  @codingStandardsIgnoreLine  --}}
+	<p class="form-row form-row-first"><label for="orderid">@php esc_html_e( 'Order ID', 'woocommerce' ); @endphp</label> <input class="input-text" type="text" name="orderid" id="orderid" value="{!! esc_attr( isset( $_REQUEST['orderid'] ) ? wp_unslash( $_REQUEST['orderid'] ) : '' ) !!}" placeholder="@php esc_attr_e( 'Found in your order confirmation email.', 'woocommerce' ); @endphp" /></p>{{--  @codingStandardsIgnoreLine  --}}
 
-	<p class="form-row form-row-last"><label for="order_email">@php esc_html_e( 'Billing email', 'woocommerce' ); @endphp</label> <input class="input-text" type="text" name="order_email" id="order_email" value="{!! isset( $_REQUEST['order_email'] ) ? esc_attr( wp_unslash( $_REQUEST['order_email'] ) ) : '' !!}" placeholder="@php esc_attr_e( 'Email you used during checkout.', 'woocommerce' ); @endphp" /></p>{{--  @codingStandardsIgnoreLine  --}}
+	<p class="form-row form-row-last"><label for="order_email">@php esc_html_e( 'Billing email', 'woocommerce' ); @endphp</label> <input class="input-text" type="text" name="order_email" id="order_email" value="{!! esc_attr( isset( $_REQUEST['order_email'] ) ? wp_unslash( $_REQUEST['order_email'] ) : '' ) !!}" placeholder="@php esc_attr_e( 'Email you used during checkout.', 'woocommerce' ); @endphp" /></p>{{--  @codingStandardsIgnoreLine  --}}
 
 	<div class="clear"></div>
 

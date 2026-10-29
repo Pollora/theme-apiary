@@ -22,8 +22,8 @@
 	<label for="payment_method_{!! esc_attr( $gateway->id ) !!}" class="flex items-center gap-3 px-4 py-3.5 cursor-pointer hover:bg-surface/50 transition-colors">
 		<input id="payment_method_{!! esc_attr( $gateway->id ) !!}" type="radio" class="input-radio shrink-0 h-4 w-4 text-foreground border-outline focus:ring-foreground/20" name="payment_method" value="{!! esc_attr( $gateway->id ) !!}" @php checked( $gateway->chosen, true ); @endphp data-order_button_text="{!! esc_attr( $gateway->order_button_text ) !!}" />
 		<span class="text-sm font-medium text-foreground flex items-center gap-2">
-			{!! $gateway->get_title() !!}
-			{!! $gateway->get_icon() !!}
+			{!! wp_kses_post( $gateway->get_title() ) !!}
+			{!! $gateway->get_icon() !!}{{-- nosemgrep -- WooCommerce returns this markup escaped, as its own templates print it --}}
 		</span>
 	</label>
 

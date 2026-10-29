@@ -47,10 +47,10 @@
                         {{-- Thumbnail --}}
                         <div class="product-thumbnail shrink-0 w-20 h-20 sm:w-24 sm:h-24 rounded-lg overflow-hidden bg-surface-alt [&_img]:w-full [&_img]:h-full [&_img]:object-cover">
                             @if ( ! $product_permalink )
-                                {!! $thumbnail !!}
+                                {!! $thumbnail !!}{{-- nosemgrep -- WooCommerce returns this markup escaped, as its own templates print it --}}
                             @else
                                 <a href="{{ esc_url( $product_permalink ) }}" class="block w-full h-full">
-                                    {!! $thumbnail !!}
+                                    {!! $thumbnail !!}{{-- nosemgrep -- WooCommerce returns this markup escaped, as its own templates print it --}}
                                 </a>
                             @endif
                         </div>
@@ -101,7 +101,7 @@
                                 {{-- Subtotal + savings --}}
                                 <div class="text-right shrink-0">
                                     <div class="product-subtotal text-sm font-semibold text-foreground">
-                                        {!! apply_filters( 'woocommerce_cart_item_subtotal', WC()->cart->get_product_subtotal( $_product, $qty ), $cart_item, $cart_item_key ) !!}
+                                        {!! wp_kses_post( apply_filters( 'woocommerce_cart_item_subtotal', WC()->cart->get_product_subtotal( $_product, $qty ), $cart_item, $cart_item_key ) ) !!}
                                     </div>
                                     @if ( $is_on_sale && $savings > 0 )
                                         <span class="inline-block mt-1 rounded-full bg-accent px-2 py-0.5 text-[11px] font-semibold text-foreground">
@@ -135,12 +135,12 @@
                                             false
                                         );
                                     @endphp
-                                    {!! apply_filters( 'woocommerce_cart_item_quantity', $product_quantity, $cart_item_key, $cart_item ) !!}
+                                    {!! apply_filters( 'woocommerce_cart_item_quantity', $product_quantity, $cart_item_key, $cart_item ) !!}{{-- nosemgrep -- WooCommerce returns this markup escaped, as its own templates print it --}}
                                 </div>
 
                                 {{-- Remove button — trash icon next to quantity (matches Gutenberg) --}}
                                 <div class="product-remove">
-                                    {!! apply_filters('woocommerce_cart_item_remove_link',
+                                    {{-- nosemgrep -- WooCommerce returns this markup escaped, as its own templates print it --}}{!! apply_filters('woocommerce_cart_item_remove_link',
                                         sprintf(
                                             '<a href="%s" class="block remove p-1.5 text-subtle hover:text-error transition-colors" role="button" aria-label="%s" data-product_id="%s" data-product_sku="%s">
                                                 <svg class="size-4.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">

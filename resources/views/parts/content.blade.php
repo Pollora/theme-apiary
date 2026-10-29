@@ -15,12 +15,12 @@
 
         @if('post' === get_post_type())
             <div class="entry-meta mt-2 text-sm text-muted">
-                {!! posted_on() !!}
-                {!! posted_by() !!}
+                {!! posted_on() !!}{{-- nosemgrep -- the theme's helper escapes what it prints --}}
+                {!! posted_by() !!}{{-- nosemgrep -- the theme's helper escapes what it prints --}}
             </div>
         @endif
     </header>
-    {!! post_thumbnail() !!}
+    {!! post_thumbnail() !!}{{-- nosemgrep -- the theme's helper escapes what it prints --}}
     <div class="entry-content is-layout-flow">
         {{-- the_content(), not get_the_content(): blocks are rendered by the
              the_content filter, so without it a dynamic block renders nothing. --}}

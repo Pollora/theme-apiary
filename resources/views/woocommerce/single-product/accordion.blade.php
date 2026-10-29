@@ -30,7 +30,7 @@
             class="pb-4 prose prose-sm text-muted max-w-none"
         >
             @if (isset($tab['callback']))
-                {!! call_user_func($tab['callback'], $key, $tab) !!}
+                {!! call_user_func($tab['callback'], $key, $tab) !!}{{-- nosemgrep -- the callback prints its own escaped markup --}}
             @endif
         </div>
     </div>

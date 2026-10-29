@@ -75,16 +75,16 @@
         <div class="flex items-center gap-3 py-3">
             {{-- Product thumbnail + info (desktop) --}}
             <div class="hidden sm:flex items-center gap-3 flex-1 min-w-0">
-                <div class="shrink-0">{!! $thumbnail !!}</div>
+                <div class="shrink-0">{!! $thumbnail !!}{{-- nosemgrep -- WooCommerce returns this markup escaped, as its own templates print it --}}</div>
                 <div class="min-w-0">
                     <p class="text-sm font-medium text-foreground truncate">{{ $product->get_name() }}</p>
-                    <p class="text-sm font-semibold text-foreground [&_del]:text-xs [&_del]:text-subtle [&_del]:mr-1 [&_ins]:no-underline">{!! $product->get_price_html() !!}</p>
+                    <p class="text-sm font-semibold text-foreground [&_del]:text-xs [&_del]:text-subtle [&_del]:mr-1 [&_ins]:no-underline">{!! wp_kses_post( $product->get_price_html() ) !!}</p>
                 </div>
             </div>
 
             {{-- Mobile: just price --}}
             <div class="sm:hidden flex-1 min-w-0">
-                <p class="text-sm font-semibold text-foreground [&_del]:text-xs [&_del]:text-subtle [&_del]:mr-1 [&_ins]:no-underline">{!! $product->get_price_html() !!}</p>
+                <p class="text-sm font-semibold text-foreground [&_del]:text-xs [&_del]:text-subtle [&_del]:mr-1 [&_ins]:no-underline">{!! wp_kses_post( $product->get_price_html() ) !!}</p>
             </div>
 
             {{-- Action area --}}

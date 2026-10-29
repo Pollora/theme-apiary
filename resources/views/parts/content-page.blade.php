@@ -8,7 +8,7 @@
         <h1 class="entry-title text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">@title</h1>
     </header><!-- .entry-header -->
 
-    {!! post_thumbnail() !!}
+    {!! post_thumbnail() !!}{{-- nosemgrep -- the theme's helper escapes what it prints --}}
 
     <div class="entry-content is-layout-flow">
         @content

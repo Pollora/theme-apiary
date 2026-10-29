@@ -26,6 +26,6 @@
 
 <div class="woocommerce-product-details__short-description">
     <div class="mt-5 prose prose-base text-muted leading-relaxed">
-        {!! apply_filters('the_content', $short_description) !!}
+        {!! apply_filters('the_content', $short_description) !!}{{-- nosemgrep -- post content, filtered by WordPress --}}
     </div>
 </div>

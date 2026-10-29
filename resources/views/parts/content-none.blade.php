@@ -10,7 +10,7 @@
     <div class="page-content">
         @if(is_home() && current_user_can('publish_posts'))
             <p>
-                {!! sprintf(
+                {!! wp_kses_post( sprintf(
                     wp_kses(
                         __('Ready to publish your first post? <a href="%1$s">Get started here</a>.', '%theme_name%'),
                         [
@@ -20,7 +20,7 @@
                         ]
                     ),
                     esc_url(admin_url('post-new.php'))
-                ) !!}
+                ) ) !!}
             </p>
         @elseif(is_search())
             <p>{{ esc_html__('Sorry, but nothing matched your search terms. Please try again with some different keywords.', '%theme_name%') }}</p>

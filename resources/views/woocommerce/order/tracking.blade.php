@@ -51,7 +51,7 @@ $notes = $order->get_customer_order_notes();
 			<div class="comment_container">
 				<div class="comment-text">
 					<p class="meta">{{--  phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped  --}}
-{!! date_i18n( esc_html__( 'l jS \o\f F Y, h:ia', 'woocommerce' ), strtotime( $note->comment_date ) ) !!}</p>
+{!! esc_html( date_i18n( esc_html__( 'l jS \o\f F Y, h:ia', 'woocommerce' ), strtotime( $note->comment_date ) ) ) !!}</p>
 					<div class="description">
 						{{--  phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped  --}}
 {!! wp_kses_post( wpautop( wptexturize( $note->comment_content ) ) ) !!}

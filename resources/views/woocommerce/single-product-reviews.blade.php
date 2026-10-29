@@ -21,7 +21,7 @@
     <div class="flex items-baseline justify-between gap-4 mb-8">
         <h2 class="text-xl font-bold text-foreground">
             @if ( $count && wc_review_ratings_enabled() )
-                {!! apply_filters( 'woocommerce_reviews_title', sprintf( _n( '%s review', '%s reviews', $count, 'woocommerce' ), $count ), $count, $product ) !!}
+                {!! wp_kses_post( apply_filters( 'woocommerce_reviews_title', sprintf( _n( '%s review', '%s reviews', $count, 'woocommerce' ), $count ), $count, $product ) ) !!}
             @else
                 {{ __( 'Reviews', 'woocommerce' ) }}
             @endif
@@ -44,7 +44,7 @@
                 </ol>
                 @if ( get_comment_pages_count() > 1 && get_option( 'page_comments' ) )
                     <nav class="woocommerce-pagination mt-8">
-                        {!!
+                        {{-- nosemgrep -- WordPress prints its own escaped links --}}{!!
                             paginate_comments_links(
                                 apply_filters(
                                     'woocommerce_comment_pagination_args',

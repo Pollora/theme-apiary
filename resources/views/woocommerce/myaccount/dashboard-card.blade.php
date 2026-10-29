@@ -8,7 +8,7 @@
     <div class="flex items-start gap-4">
         <div class="flex size-10 shrink-0 items-center justify-center rounded-lg bg-surface-alt text-muted group-hover:bg-primary/10 group-hover:text-primary transition-colors">
             @if (!empty($icons[$icon]))
-                {!! $icons[$icon] !!}
+                {!! $icons[$icon] !!}{{-- nosemgrep -- the theme's own SVG icon --}}
             @endif
         </div>
         <div class="min-w-0">

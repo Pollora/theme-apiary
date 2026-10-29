@@ -29,7 +29,7 @@ $downloads = WC()->customer->get_downloadable_products();
 	@php do_action( 'woocommerce_before_available_downloads' ); @endphp
 
 	<h2>{{--  phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped  --}}
-{!! apply_filters( 'woocommerce_my_account_my_downloads_title', esc_html__( 'Available downloads', 'woocommerce' ) ) !!}</h2>
+{!! wp_kses_post( apply_filters( 'woocommerce_my_account_my_downloads_title', esc_html__( 'Available downloads', 'woocommerce' ) ) ) !!}</h2>
 
 	<ul class="woocommerce-Downloads digital-downloads">
 		

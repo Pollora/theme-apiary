@@ -9,7 +9,7 @@
  * @version 2.3.6
  --}}
 
-<div class="cart_totals {!! WC()->customer->has_calculated_shipping() ? 'calculated_shipping' : '' !!}">
+<div class="cart_totals {{ WC()->customer->has_calculated_shipping() ? 'calculated_shipping' : '' }}">
     @php do_action( 'woocommerce_before_cart_totals' ); @endphp
 
     <h2 class="text-sm font-semibold text-foreground">{{ __( 'Cart totals', 'woocommerce' ) }}</h2>
@@ -125,13 +125,13 @@
             @if ( 'itemized' === get_option( 'woocommerce_tax_total_display' ) )
                 @foreach ( WC()->cart->get_tax_totals() as $code => $tax )
                     <div class="tax-rate flex items-center justify-between tax-rate-{!! esc_attr( sanitize_title( $code ) ) !!}">
-                        <dt class="text-sm text-muted">{!! $tax->label . $estimated_text !!}</dt>
+                        <dt class="text-sm text-muted">{!! esc_html( $tax->label ) . $estimated_text !!}</dt>
                         <dd class="text-sm font-medium text-foreground">{!! wp_kses_post( $tax->formatted_amount ) !!}</dd>
                     </div>
                 @endforeach
             @else
                 <div class="tax-total flex items-center justify-between">
-                    <dt class="text-sm text-muted">{!! WC()->countries->tax_or_vat() . $estimated_text !!}</dt>
+                    <dt class="text-sm text-muted">{!! esc_html( WC()->countries->tax_or_vat() ) . $estimated_text !!}</dt>
                     <dd class="text-sm font-medium text-foreground">{!! wc_cart_totals_taxes_total_html() !!}</dd>
                 </div>
             @endif

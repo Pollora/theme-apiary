@@ -27,7 +27,7 @@
 <div class="{{ esc_attr( apply_filters( 'woocommerce_order_item_class', 'woocommerce-table__line-item order_item py-5 border-b border-outline last:border-b-0 flex gap-4', $item, $order ) ) }}">
     @if ($thumbnail)
         <div class="not-prose shrink-0 size-16 sm:size-[72px] rounded-lg overflow-hidden bg-surface-alt [&_img]:size-full [&_img]:object-cover [&_img]:m-0">
-            {!! $thumbnail !!}
+            {!! $thumbnail !!}{{-- nosemgrep -- WooCommerce returns this markup escaped, as its own templates print it --}}
         </div>
     @endif
     <div class="flex-1 min-w-0 flex flex-col justify-between gap-2">
@@ -53,10 +53,10 @@
         </div>
         <div class="flex items-center justify-between text-sm">
             <span class="text-muted">
-                {!! apply_filters( 'woocommerce_order_item_quantity_html', sprintf( '&times;&nbsp;%s', $qty_display ), $item ) !!}
+                {!! wp_kses_post( apply_filters( 'woocommerce_order_item_quantity_html', sprintf( '&times;&nbsp;%s', $qty_display ), $item ) ) !!}
             </span>
             <span class="woocommerce-table__product-total product-total font-semibold text-foreground">
-                {!! $order->get_formatted_line_subtotal( $item ) !!}
+                {!! wp_kses_post( $order->get_formatted_line_subtotal( $item ) ) !!}
             </span>
         </div>
     </div>
@@ -64,6 +64,6 @@
 
 @if ( $show_purchase_note && $purchase_note )
     <div class="woocommerce-table__product-purchase-note product-purchase-note px-4 py-3 mb-2 bg-surface rounded-lg text-sm text-muted">
-        {!! wpautop( do_shortcode( wp_kses_post( $purchase_note ) ) ) !!}
+        {!! wp_kses_post( wpautop( do_shortcode( wp_kses_post( $purchase_note ) ) ) ) !!}
     </div>
 @endif

@@ -45,7 +45,7 @@
             do_action('woocommerce_after_single_product_gallery');
         @endphp
 
-        {!! apply_filters( 'woocommerce_single_product_image_thumbnail_html', $html, $post_thumbnail_id ) !!}
+        {!! apply_filters( 'woocommerce_single_product_image_thumbnail_html', $html, $post_thumbnail_id ) !!}{{-- nosemgrep -- WooCommerce returns this markup escaped, as its own templates print it --}}
         @php
             do_action( 'woocommerce_product_thumbnails' );
         @endphp

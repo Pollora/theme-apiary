@@ -60,11 +60,11 @@
             <div class="woocommerce-order-overview woocommerce-thankyou-order-details order_details grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8 list-none !pl-0">
                 <div class="woocommerce-order-overview__date date rounded-xl border border-outline bg-white p-4 text-center">
                     <div class="text-xs font-medium text-muted uppercase tracking-wider">@php esc_html_e( 'Date', 'woocommerce' ); @endphp</div>
-                    <div class="mt-1.5 text-sm font-semibold text-foreground">{!! wc_format_datetime( $order->get_date_created() ) !!}</div>
+                    <div class="mt-1.5 text-sm font-semibold text-foreground">{!! esc_html( wc_format_datetime( $order->get_date_created() ) ) !!}</div>
                 </div>
                 <div class="woocommerce-order-overview__total total rounded-xl border border-outline bg-white p-4 text-center">
                     <div class="text-xs font-medium text-muted uppercase tracking-wider">@php esc_html_e( 'Total', 'woocommerce' ); @endphp</div>
-                    <div class="mt-1.5 text-sm font-semibold text-foreground">{!! $order->get_formatted_order_total() !!}</div>
+                    <div class="mt-1.5 text-sm font-semibold text-foreground">{!! wp_kses_post( $order->get_formatted_order_total() ) !!}</div>
                 </div>
                 @if ( $order->get_payment_method_title() )
                     <div class="woocommerce-order-overview__payment-method method rounded-xl border border-outline bg-white p-4 text-center">
@@ -75,7 +75,7 @@
                 @if ( is_user_logged_in() && $order->get_user_id() === get_current_user_id() && $order->get_billing_email() )
                     <div class="woocommerce-order-overview__email email rounded-xl border border-outline bg-white p-4 text-center">
                         <div class="text-xs font-medium text-muted uppercase tracking-wider">@php esc_html_e( 'Email', 'woocommerce' ); @endphp</div>
-                        <div class="mt-1.5 text-sm font-semibold text-foreground truncate">{!! $order->get_billing_email() !!}</div>
+                        <div class="mt-1.5 text-sm font-semibold text-foreground truncate">{!! esc_html( $order->get_billing_email() ) !!}</div>
                     </div>
                 @endif
             </div>

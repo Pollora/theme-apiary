@@ -31,7 +31,7 @@
 		{!! esc_html( $button_text ) !!}
 		@if ($product->get_price_html())
 			<span class="mx-2 opacity-50">—</span>
-			<span class="[&_del]:text-white/60 [&_del]:text-sm [&_ins]:no-underline">{!! $product->get_price_html() !!}</span>
+			<span class="[&_del]:text-white/60 [&_del]:text-sm [&_ins]:no-underline">{!! wp_kses_post( $product->get_price_html() ) !!}</span>
 		@endif
 	</button>
 

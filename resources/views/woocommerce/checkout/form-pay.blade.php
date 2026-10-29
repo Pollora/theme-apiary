@@ -54,9 +54,9 @@
 								do_action( 'woocommerce_order_item_meta_end', $item_id, $item, $order, false );
 							@endphp
 						</td>
-						<td class="product-quantity">{!! apply_filters( 'woocommerce_order_item_quantity_html', ' <strong class="product-quantity">' . sprintf( '&times;&nbsp;%s', esc_html( $item->get_quantity() ) ) . '</strong>', $item ) !!}</td>{{--  @codingStandardsIgnoreLine  --}}
+						<td class="product-quantity">{!! wp_kses_post( apply_filters( 'woocommerce_order_item_quantity_html', ' <strong class="product-quantity">' . sprintf( '&times;&nbsp;%s', esc_html( $item->get_quantity() ) ) . '</strong>', $item ) ) !!}</td>{{--  @codingStandardsIgnoreLine  --}}
 
-						<td class="product-subtotal">{!! $order->get_formatted_line_subtotal( $item ) !!}</td>{{--  @codingStandardsIgnoreLine  --}}
+						<td class="product-subtotal">{!! wp_kses_post( $order->get_formatted_line_subtotal( $item ) ) !!}</td>{{--  @codingStandardsIgnoreLine  --}}
 
 					</tr>
 				
@@ -74,9 +74,9 @@
 @foreach ( $totals as $total )
 
 					<tr>
-						<th scope="row" colspan="2">{!! $total['label'] !!}</th>{{--  @codingStandardsIgnoreLine  --}}
+						<th scope="row" colspan="2">{!! esc_html( $total['label'] ) !!}</th>{{--  @codingStandardsIgnoreLine  --}}
 
-						<td class="product-total">{!! $total['value'] !!}</td>{{--  @codingStandardsIgnoreLine  --}}
+						<td class="product-total">{!! wp_kses_post( $total['value'] ) !!}</td>{{--  @codingStandardsIgnoreLine  --}}
 
 					</tr>
 				
@@ -116,7 +116,7 @@
 			@php do_action( 'woocommerce_pay_order_before_submit' ); @endphp
 
 			{{--  @codingStandardsIgnoreLine  --}}
-{!! apply_filters( 'woocommerce_pay_order_button_html', '<button type="submit" class="button alt" id="place_order" value="' . esc_attr( $order_button_text ) . '" data-value="' . esc_attr( $order_button_text ) . '">' . esc_html( $order_button_text ) . '</button>' ) !!}
+{!! apply_filters( 'woocommerce_pay_order_button_html', '<button type="submit" class="button alt" id="place_order" value="' . esc_attr( $order_button_text ) . '" data-value="' . esc_attr( $order_button_text ) . '">' . esc_html( $order_button_text ) . '</button>' ) !!}{{-- nosemgrep -- WooCommerce returns this markup escaped, as its own templates print it --}}
 
 			@php do_action( 'woocommerce_pay_order_after_submit' ); @endphp
 

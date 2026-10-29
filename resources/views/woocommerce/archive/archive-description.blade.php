@@ -4,5 +4,5 @@
  * @package %theme_namespace%\WooCommerce
  --}}
 <div class="mt-4 text-base text-muted">
-    {!! $description !!}
+    {!! wp_kses_post( $description ) !!}
 </div>

@@ -15,7 +15,7 @@
 @else
     <div class="rounded-xl border border-outline bg-white p-5 sm:p-8">
         <h2 class="mt-0 text-xl font-bold text-foreground">
-            {!! apply_filters( 'woocommerce_my_account_edit_address_title', $page_title, $load_address ) !!}
+            {!! wp_kses_post( apply_filters( 'woocommerce_my_account_edit_address_title', $page_title, $load_address ) ) !!}
         </h2>
 
         <form method="post" class="mt-6">

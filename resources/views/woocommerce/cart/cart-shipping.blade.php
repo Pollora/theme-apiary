@@ -53,7 +53,7 @@
 				<p class="woocommerce-shipping-destination mt-4 text-center text-sm text-muted sm:mt-0 sm:text-left">
 					{{--  Translators: $s shipping destination. --}}
 					@if ( $formatted_destination )
-						{!! sprintf( esc_html__( 'Shipping to %s.', 'woocommerce' ) . ' ', '<strong>' . esc_html( $formatted_destination ) . '</strong>' ) !!}
+						{!! wp_kses_post( sprintf( esc_html__( 'Shipping to %s.', 'woocommerce' ) . ' ', '<strong>' . esc_html( $formatted_destination ) . '</strong>' ) ) !!}
 						@php
 							$calculator_text = esc_html__( 'Change address', 'woocommerce' );
 						@endphp

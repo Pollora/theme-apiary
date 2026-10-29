@@ -26,14 +26,14 @@
                     @endphp
                     <li class="{{ $item_class }}">
                         <a href="{{ esc_url( wc_get_account_endpoint_url( $endpoint ) ) }}"
-                           {!! $current ? 'aria-current="page"' : '' !!}
+                           @if($current) aria-current="page" @endif
                            class="group flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors
                                   {{ $current
                                       ? 'bg-primary text-white'
                                       : 'text-muted hover:bg-surface-alt hover:text-foreground' }}">
                             @if ($icon)
                                 <span class="{{ $current ? 'text-white' : 'text-subtle group-hover:text-muted' }} transition-colors shrink-0">
-                                    {!! $icon !!}
+                                    {!! $icon !!}{{-- nosemgrep -- the theme's own SVG icon --}}
                                 </span>
                             @endif
                             {!! esc_html( $label ) !!}
@@ -58,14 +58,14 @@
                     @endphp
                     <li class="{{ $item_class }}">
                         <a href="{{ esc_url( wc_get_account_endpoint_url( $endpoint ) ) }}"
-                           {!! $current ? 'aria-current="page"' : '' !!}
+                           @if($current) aria-current="page" @endif
                            class="flex items-center gap-2 whitespace-nowrap rounded-full px-4 py-2 text-sm font-medium transition-colors
                                   {{ $current
                                       ? 'bg-primary text-white shadow-xs'
                                       : 'bg-surface-alt text-muted hover:bg-outline hover:text-foreground' }}">
                             @if ($icon)
                                 <span class="{{ $current ? 'text-white' : 'text-subtle' }} shrink-0">
-                                    {!! $icon !!}
+                                    {!! $icon !!}{{-- nosemgrep -- the theme's own SVG icon --}}
                                 </span>
                             @endif
                             {!! esc_html( $label ) !!}

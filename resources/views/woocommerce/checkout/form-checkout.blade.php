@@ -38,7 +38,7 @@ if ( ! $checkout->is_registration_enabled() && $checkout->is_registration_requir
 				<button type="button" @click="summaryOpen = !summaryOpen" class="flex items-center justify-between w-full p-5 text-left">
 					<h3 class="text-lg font-bold text-foreground m-0">{{ __( 'Order summary', 'woocommerce' ) }}</h3>
 					<div class="flex items-center gap-2">
-						<span class="text-sm font-semibold text-foreground">{!! WC()->cart->get_total() !!}</span>
+						<span class="text-sm font-semibold text-foreground">{!! wp_kses_post( WC()->cart->get_total() ) !!}</span>
 						<svg class="size-5 text-muted transition-transform duration-200" :class="{ 'rotate-180': summaryOpen }" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" /></svg>
 					</div>
 				</button>

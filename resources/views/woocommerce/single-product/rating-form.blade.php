@@ -54,7 +54,7 @@
                     <div x-text="currentLabel()"></div>
                 </template>
                 <template x-if="!rating && !hoverRating">
-                    <div>{!! __('Rate&hellip;', 'woocommerce') !!}</div>
+                    <div>{!! wp_kses_post( __('Rate&hellip;', 'woocommerce') ) !!}</div>
                 </template>
             </div>
         </span>

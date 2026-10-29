@@ -9,7 +9,7 @@
   --}}
 @php
 @endphp
-<li {!! comment_class('rounded-xl border border-outline bg-white p-5'); !!} id="li-comment-{!! comment_ID() !!}">
+<li {!! comment_class('rounded-xl border border-outline bg-white p-5'); !!} id="li-comment-{{ get_comment_ID() }}">
 
     <div id="comment-@php comment_ID(); @endphp" class="comment_container">
         <div class="flex items-start gap-4">

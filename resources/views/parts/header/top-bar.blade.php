@@ -19,7 +19,7 @@
             {{-- Logo --}}
             <a href="{{ home_url() }}" class="shrink-0 text-foreground no-underline focus:outline-2 focus:outline-offset-2 focus:outline-ring">
                 @if (has_custom_logo())
-                    {!! \%theme_namespace%\custom_logo('h-8 lg:h-9 w-auto', 'custom-logo-link', false) !!}
+                    {!! \%theme_namespace%\custom_logo('h-8 lg:h-9 w-auto', 'custom-logo-link', false) !!}{{-- nosemgrep -- the theme's helper escapes what it prints --}}
                 @else
                     <span class="text-xl lg:text-2xl font-bold tracking-tight">{{ get_bloginfo('name') }}</span>
                 @endif

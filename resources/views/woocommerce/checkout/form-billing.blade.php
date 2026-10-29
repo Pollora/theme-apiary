@@ -51,7 +51,7 @@
 			? __( 'Billing & Shipping', 'woocommerce' )
 			: __( 'Billing details', 'woocommerce' );
 	@endphp
-	<div class="mt-8" x-data="{!! $billing_alpine !!}" x-init="jQuery(document.body).on('checkout_error', function() { editing = true })">
+	<div class="mt-8" x-data="{!! $billing_alpine !!}{{-- nosemgrep -- an Alpine expression built in this template from fixed strings --}}" x-init="jQuery(document.body).on('checkout_error', function() { editing = true })">
 		<h3 class="text-lg lg:text-xl font-bold text-foreground mb-4 lg:mb-6">{{ $billing_heading }}</h3>
 
 		@php do_action( 'woocommerce_before_checkout_billing_form', $checkout ); @endphp

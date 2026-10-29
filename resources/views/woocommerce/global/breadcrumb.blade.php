@@ -13,7 +13,7 @@
                 @if ( ! empty( $crumb[1] ) && sizeof( $breadcrumb ) !== $key + 1 )
                     <li class="flex items-center gap-1.5">
                         <a href="{{ $crumb[1] }}" class="text-xs text-muted hover:text-foreground transition-colors">
-                            {!! $crumb[0] !!}
+                            {!! esc_html( $crumb[0] ) !!}
                         </a>
                         <svg class="h-3 w-3 shrink-0 text-outline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"/>
@@ -22,7 +22,7 @@
                 @else
                     <li class="text-xs">
                         <span aria-current="page" class="text-subtle">
-                            {!! $crumb[0] !!}
+                            {!! esc_html( $crumb[0] ) !!}
                         </span>
                     </li>
                 @endif

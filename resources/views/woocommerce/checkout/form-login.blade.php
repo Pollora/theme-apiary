@@ -26,7 +26,7 @@ if ( is_user_logged_in() ) {
 @if ( $login_reminder_at_checkout )
 <div class="woocommerce-form-login-toggle">
 	<div class="mb-10 border-b border-outline pb-6 sm:flex sm:items-center sm:justify-between">
-		<p class="mt-4 text-center text-sm text-muted sm:mt-0 sm:text-left">{!! apply_filters( 'woocommerce_checkout_login_message', esc_html__( 'Returning customer?', 'woocommerce' ) ) !!}</p>
+		<p class="mt-4 text-center text-sm text-muted sm:mt-0 sm:text-left">{!! wp_kses_post( apply_filters( 'woocommerce_checkout_login_message', esc_html__( 'Returning customer?', 'woocommerce' ) ) ) !!}</p>
 		<button type="submit" class="w-full rounded-md border border-transparent bg-primary py-2 px-4 text-sm font-medium text-white shadow-xs hover:bg-primary-hover focus:outline-hidden focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-surface sm:order-last sm:ml-6 sm:w-auto" @click="loginModalOpen = true">{{ __( 'Click here to login', 'woocommerce' ) }}</button>
 	</div>
 </div>

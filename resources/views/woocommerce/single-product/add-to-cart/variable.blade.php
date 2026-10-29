@@ -43,7 +43,7 @@ do_action( 'woocommerce_before_add_to_cart_form' ); @endphp
 
 					<tr>
 						<td class="label"><label for="{!! esc_attr( sanitize_title( $attribute_name ) ) !!}">{{--  WPCS: XSS ok.  --}}
-{!! wc_attribute_label( $attribute_name ) !!}</label></td>
+{!! esc_html( wc_attribute_label( $attribute_name ) ) !!}</label></td>
 						<td class="value">
 							@php
 								wc_dropdown_variation_attribute_options(

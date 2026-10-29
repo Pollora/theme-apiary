@@ -36,7 +36,7 @@ $customer_orders = get_posts(
 
 
 	<h2>{{--  phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped  --}}
-{!! apply_filters( 'woocommerce_my_account_my_orders_title', esc_html__( 'Recent orders', 'woocommerce' ) ) !!}</h2>
+{!! wp_kses_post( apply_filters( 'woocommerce_my_account_my_orders_title', esc_html__( 'Recent orders', 'woocommerce' ) ) ) !!}</h2>
 
 	<table class="shop_table shop_table_responsive my_account_orders">
 
@@ -74,7 +74,7 @@ $customer_orders = get_posts(
 
 								<a href="{!! esc_url( $order->get_view_order_url() ) !!}">
 									{{--  phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped  --}}
-{!! _x( '#', 'hash before order number', 'woocommerce' ) . $order->get_order_number() !!}
+{!! esc_html( _x( '#', 'hash before order number', 'woocommerce' ) . $order->get_order_number() ) !!}
 								</a>
 
 							

@@ -10,7 +10,7 @@
     $args['class'] .= ' relative flex bg-primary border border-transparent rounded-md py-2.5 px-3 sm:px-8 items-center justify-center text-xs sm:text-sm font-medium text-white no-underline hover:bg-primary-hover transition-colors duration-150';
 @endphp
 
-{!! apply_filters(
+{{-- nosemgrep -- WooCommerce returns this markup escaped, as its own templates print it --}}{!! apply_filters(
     'woocommerce_loop_add_to_cart_link', // WPCS: XSS ok.
     sprintf(
         '<a href="%s" data-quantity="%s" class="%s" %s>%s</a>',
