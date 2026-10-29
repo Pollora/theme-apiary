@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 /**
  * WooCommerce core activation check.
- *
- * @package %theme_namespace%
  */
 
 use Pollora\Support\Facades\Action;

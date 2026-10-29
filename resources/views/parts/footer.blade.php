@@ -64,7 +64,7 @@
         <div class="border-t border-outline py-10 sm:flex sm:items-center sm:justify-between">
             <p class="text-sm text-muted">&copy; {{ date('Y') }} {{ bloginfo('site_title') }}</p>
             <div class="mt-4 flex space-x-6 sm:mt-0">
-                @php do_action('%theme_name%_footer_links') @endphp
+                @php do_action('%theme_name_%footer_links') @endphp
             </div>
         </div>
     </div>
