@@ -144,7 +144,7 @@
                 <div class="rounded-xl border border-outline bg-white p-5">
                     <dt class="!mt-0 text-xs font-semibold text-muted uppercase tracking-wider">{{ __( $total['label'] ) }}</dt>
                     <dd class="!pl-0 mt-2 text-sm text-foreground">
-                        {!! ( 'payment_method' === $key ) ? esc_html( $total['value'] ) : wp_kses_post( $total['value'] ) !!}
+                        {!! wp_kses_post( ( 'payment_method' === $key ) ? esc_html( $total['value'] ) : $total['value'] ) !!}
                     </dd>
                 </div>
             @endif

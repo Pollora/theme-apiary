@@ -121,7 +121,7 @@
                 @if ( 1 !== $current_page )
                     <a class="woocommerce-button woocommerce-button--previous woocommerce-Button woocommerce-Button--previous button inline-flex items-center rounded-lg border border-outline bg-white px-4 py-2 text-sm font-medium text-muted shadow-xs hover:bg-surface-alt hover:text-foreground transition-colors"
                        href="{{ esc_url( wc_get_endpoint_url( 'orders', $current_page - 1 ) ) }}">
-                        @if (!empty($icons['chevron-left'])) <span class="mr-1.5">{!! $icons['chevron-left'] !!}</span> @endif
+                        @if (!empty($icons['chevron-left'])) <span class="mr-1.5">{!! $icons['chevron-left'] !!}{{-- nosemgrep -- the theme's own SVG icon --}}</span> @endif
                         @php esc_html_e( 'Previous', 'woocommerce' ); @endphp
                     </a>
                 @endif
@@ -129,7 +129,7 @@
                     <a class="woocommerce-button woocommerce-button--next woocommerce-Button woocommerce-Button--next button inline-flex items-center rounded-lg border border-outline bg-white px-4 py-2 text-sm font-medium text-muted shadow-xs hover:bg-surface-alt hover:text-foreground transition-colors"
                        href="{{ esc_url( wc_get_endpoint_url( 'orders', $current_page + 1 ) ) }}">
                         @php esc_html_e( 'Next', 'woocommerce' ); @endphp
-                        @if (!empty($icons['chevron-right'])) <span class="ml-1.5">{!! $icons['chevron-right'] !!}</span> @endif
+                        @if (!empty($icons['chevron-right'])) <span class="ml-1.5">{!! $icons['chevron-right'] !!}{{-- nosemgrep -- the theme's own SVG icon --}}</span> @endif
                     </a>
                 @endif
             </div>
@@ -141,7 +141,7 @@
     {{-- Empty state --}}
     <div class="rounded-xl border border-dashed border-outline bg-surface/50 py-12 text-center">
         @if (!empty($icons['empty-orders']))
-            <span class="flex justify-center text-subtle">{!! $icons['empty-orders'] !!}</span>
+            <span class="flex justify-center text-subtle">{!! $icons['empty-orders'] !!}{{-- nosemgrep -- the theme's own SVG icon --}}</span>
         @endif
         <h3 class="mt-4 text-sm font-semibold text-foreground">@php esc_html_e( 'No order has been made yet.', 'woocommerce' ); @endphp</h3>
         <p class="mt-1 text-sm text-muted">@php esc_html_e( 'Browse our products and place your first order.', 'woocommerce' ); @endphp</p>

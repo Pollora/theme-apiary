@@ -23,7 +23,7 @@ use \%theme_namespace%\Walkers\MenuPrimary;
     <div class="flex items-center justify-between h-16 px-4 border-b border-outline">
         <a href="{{ home_url() }}" class="text-foreground no-underline">
             @if (has_custom_logo())
-                {!! \%theme_namespace%\custom_logo('h-7 w-auto', 'custom-logo-link', false) !!}
+                {!! \%theme_namespace%\custom_logo('h-7 w-auto', 'custom-logo-link', false) !!}{{-- nosemgrep -- the theme's helper escapes what it prints --}}
             @else
                 <span class="text-lg font-bold tracking-tight">{{ get_bloginfo('name') }}</span>
             @endif

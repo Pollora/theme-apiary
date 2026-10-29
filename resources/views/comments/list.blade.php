@@ -5,7 +5,7 @@
  --}}
 <div id="comments" class="comments-area">
     @if(have_comments())
-        <h2 class="comments-title">{!! comments_title(get_comments_number()) !!}</h2>
+        <h2 class="comments-title">{!! comments_title(get_comments_number()) !!}{{-- nosemgrep -- the theme's helper escapes what it prints --}}</h2>
         {!! get_the_comments_navigation() !!}
         <ol class="comment-list">
             {!! wp_list_comments([

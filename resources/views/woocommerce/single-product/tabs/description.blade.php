@@ -20,7 +20,7 @@
 @endphp
 
 @if ( $heading )
-	<h2 class="sr-only">{!! $heading !!}</h2>
+	<h2 class="sr-only">{!! esc_html( $heading ) !!}</h2>
 @endif
 <div>
 	@php the_content(); @endphp

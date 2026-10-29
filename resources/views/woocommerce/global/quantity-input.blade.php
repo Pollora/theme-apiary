@@ -39,7 +39,7 @@
 			size="4"
 			placeholder="{!! esc_attr( $placeholder ) !!}"
 			inputmode="{!! esc_attr( $inputmode ) !!}"
-			{!! $readonly ? 'readonly="readonly"' : '' !!} />
+			@if($readonly) readonly="readonly" @endif />
 		@if ( ! $readonly )
 		<button type="button" class="qty-plus flex items-center justify-center w-10 h-full text-muted hover:text-foreground transition-colors" aria-label="{{ __('Increase quantity', 'woocommerce') }}">
 			<svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>

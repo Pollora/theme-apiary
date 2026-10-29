@@ -47,10 +47,10 @@
                     <li class="woocommerce-mini-cart-item py-4 flex gap-4 {!! esc_attr( apply_filters( 'woocommerce_mini_cart_item_class', 'mini_cart_item', $cart_item, $cart_item_key ) ) !!}">
                         <div class="shrink-0 size-20 rounded-lg overflow-hidden bg-surface-alt [&_img]:size-full [&_img]:object-cover [&_img]:m-0">
                             @if ( empty( $product_permalink ) )
-                                {!! $thumbnail !!}
+                                {!! $thumbnail !!}{{-- nosemgrep -- WooCommerce returns this markup escaped, as its own templates print it --}}
                             @else
                                 <a href="{{ esc_url( $product_permalink ) }}" class="block size-full">
-                                    {!! $thumbnail !!}
+                                    {!! $thumbnail !!}{{-- nosemgrep -- WooCommerce returns this markup escaped, as its own templates print it --}}
                                     <span class="sr-only">{!! wp_kses_post( $product_name ) !!}</span>
                                 </a>
                             @endif
@@ -63,7 +63,7 @@
                                     </a>
                                 </h3>
                                 <p class="text-sm font-semibold text-foreground shrink-0">
-                                    {!! $product_price !!}
+                                    {!! wp_kses_post( $product_price ) !!}
                                 </p>
                             </div>
                             @if ( wc_get_formatted_cart_item_data( $cart_item ) )
@@ -73,12 +73,12 @@
                             @endif
                             <div class="mt-auto pt-2 flex items-center justify-between">
                                 <span class="text-xs text-muted">
-                                    {!! apply_filters( 'woocommerce_widget_cart_item_quantity', '<span class="quantity">' . sprintf( '%s &times; %s', $cart_item['quantity'], $product_price ) . '</span>', $cart_item, $cart_item_key ) !!}
+                                    {!! wp_kses_post( apply_filters( 'woocommerce_widget_cart_item_quantity', '<span class="quantity">' . sprintf( '%s &times; %s', $cart_item['quantity'], $product_price ) . '</span>', $cart_item, $cart_item_key ) ) !!}
                                 </span>
                                 @php
                                     $remove_success_message = sprintf( __( '&ldquo;%s&rdquo; has been removed from your cart.', 'woocommerce' ), wp_strip_all_tags( $product_name ) );
                                 @endphp
-                                {!!
+                                {{-- nosemgrep -- WooCommerce returns this markup escaped, as its own templates print it --}}{!!
                                     apply_filters('woocommerce_cart_item_remove_link',
                                         sprintf(
                                             '<a href="%s" class="text-xs font-medium text-subtle hover:text-error transition-colors remove_from_cart_button" role="button" aria-label="%s" data-product_id="%s" data-cart_item_key="%s" data-product_sku="%s" data-success_message="%s">%s</a>',
@@ -120,7 +120,7 @@
     <div class="shrink-0 border-t border-outline bg-white px-4 sm:px-6 py-5">
         <div class="flex items-center justify-between">
             <span class="text-sm font-medium text-foreground">{{ esc_html__( 'Subtotal', 'woocommerce' ) }}</span>
-            <span class="text-base font-semibold text-foreground">{!! WC()->cart->get_cart_subtotal() !!}</span>
+            <span class="text-base font-semibold text-foreground">{!! wp_kses_post( WC()->cart->get_cart_subtotal() ) !!}</span>
         </div>
         @php do_action( 'woocommerce_widget_shopping_cart_total' ); @endphp
 

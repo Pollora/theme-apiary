@@ -51,7 +51,7 @@
             @php do_action( 'woocommerce_login_form_start' ); @endphp
 
             <div class="text-sm text-muted">
-                {!! ( $message ) ? wpautop( wptexturize( $message ) ) : '' !!}
+                {!! wp_kses_post( ( $message ) ? wpautop( wptexturize( $message ) ) : '' ) !!}
             </div>
 
             <div class="form-row form-row-first">

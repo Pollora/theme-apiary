@@ -29,7 +29,7 @@
 				@endforeach
 			@else
 				<li class="woocommerce-notice woocommerce-notice--info woocommerce-info">
-					{!! apply_filters( 'woocommerce_no_available_payment_methods_message', WC()->customer->get_billing_country() ? esc_html__( 'Sorry, it seems that there are no available payment methods for your state. Please contact us if you require assistance or wish to make alternate arrangements.', 'woocommerce' ) : esc_html__( 'Please fill in your details above to see available payment methods.', 'woocommerce' ) ) !!}
+					{!! wp_kses_post( apply_filters( 'woocommerce_no_available_payment_methods_message', WC()->customer->get_billing_country() ? esc_html__( 'Sorry, it seems that there are no available payment methods for your state. Please contact us if you require assistance or wish to make alternate arrangements.', 'woocommerce' ) : esc_html__( 'Please fill in your details above to see available payment methods.', 'woocommerce' ) ) ) !!}
 				</li>
 			@endif
 		</ul>
@@ -56,7 +56,7 @@
 	<div class="form-row place-order">
 		<noscript>
 			{{--  translators: $1 and $2 opening and closing emphasis tags respectively  --}}
-			{!! sprintf( esc_html__( 'Since your browser does not support JavaScript, or it is disabled, please ensure you click the %1$sUpdate Totals%2$s button before placing your order. You may be charged more than the amount stated above if you fail to do so.', 'woocommerce' ), '<em>', '</em>' ) !!}
+			{!! wp_kses_post( sprintf( esc_html__( 'Since your browser does not support JavaScript, or it is disabled, please ensure you click the %1$sUpdate Totals%2$s button before placing your order. You may be charged more than the amount stated above if you fail to do so.', 'woocommerce' ), '<em>', '</em>' ) ) !!}
 			<br/><button type="submit" class="button alt" name="woocommerce_checkout_update_totals" value="@php esc_attr_e( 'Update totals', 'woocommerce' ); @endphp">@php esc_html_e( 'Update totals', 'woocommerce' ); @endphp</button>
 		</noscript>
 
@@ -70,7 +70,7 @@
 				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" class="size-4 fill-current"><path d="M20 11.2H6.8l3.7-3.7-1-1L3.9 12l5.6 5.5 1-1-3.7-3.7H20z"></path></svg>
 				{{ __( 'Return to Cart', 'woocommerce' ) }}
 			</a>
-			{!! apply_filters( 'woocommerce_order_button_html', '<button type="submit" class="button alt flex-1 bg-primary border border-transparent rounded-xl shadow-xs py-3 px-4 text-base font-semibold text-white hover:bg-primary-hover focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-offset-surface focus:ring-ring" name="woocommerce_checkout_place_order" id="place_order" value="' . esc_attr( $order_button_text ) . '" data-value="' . esc_attr( $order_button_text ) . '">' . esc_html( $order_button_text ) . '</button>' ) !!}
+			{!! apply_filters( 'woocommerce_order_button_html', '<button type="submit" class="button alt flex-1 bg-primary border border-transparent rounded-xl shadow-xs py-3 px-4 text-base font-semibold text-white hover:bg-primary-hover focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-offset-surface focus:ring-ring" name="woocommerce_checkout_place_order" id="place_order" value="' . esc_attr( $order_button_text ) . '" data-value="' . esc_attr( $order_button_text ) . '">' . esc_html( $order_button_text ) . '</button>' ) !!}{{-- nosemgrep -- WooCommerce returns this markup escaped, as its own templates print it --}}
 			@php do_action( 'woocommerce_review_order_after_submit' ); @endphp
 		</div>
 
@@ -82,7 +82,7 @@
 				<a href="{{ esc_url( wc_get_cart_url() ) }}" class="shrink-0 flex items-center justify-center size-11 border border-outline rounded-xl bg-surface text-muted hover:text-foreground hover:border-ring transition-colors" aria-label="{{ esc_attr__( 'Return to Cart', 'woocommerce' ) }}">
 					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false" class="size-5 fill-current"><path d="M20 11.2H6.8l3.7-3.7-1-1L3.9 12l5.6 5.5 1-1-3.7-3.7H20z"></path></svg>
 				</a>
-				{!! apply_filters( 'woocommerce_order_button_html', '<button type="submit" class="button alt flex-1 bg-primary border border-transparent rounded-xl shadow-xs py-3 px-4 text-[15px] font-semibold text-white hover:bg-primary-hover focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-offset-surface focus:ring-ring min-h-11" name="woocommerce_checkout_place_order" id="place_order_mobile" value="' . esc_attr( $order_button_text ) . '" data-value="' . esc_attr( $order_button_text ) . '">' . esc_html( $order_button_text ) . '</button>' ) !!}
+				{!! apply_filters( 'woocommerce_order_button_html', '<button type="submit" class="button alt flex-1 bg-primary border border-transparent rounded-xl shadow-xs py-3 px-4 text-[15px] font-semibold text-white hover:bg-primary-hover focus:outline-hidden focus:ring-2 focus:ring-offset-2 focus:ring-offset-surface focus:ring-ring min-h-11" name="woocommerce_checkout_place_order" id="place_order_mobile" value="' . esc_attr( $order_button_text ) . '" data-value="' . esc_attr( $order_button_text ) . '">' . esc_html( $order_button_text ) . '</button>' ) !!}{{-- nosemgrep -- WooCommerce returns this markup escaped, as its own templates print it --}}
 				@php do_action( 'woocommerce_review_order_after_submit' ); @endphp
 			</div>
 		</div>

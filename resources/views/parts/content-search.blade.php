@@ -10,12 +10,12 @@
         </h2>
         @if('post' === get_post_type())
             <div class="entry-meta">
-                {!! posted_on() !!}
-                {!! posted_by() !!}
+                {!! posted_on() !!}{{-- nosemgrep -- the theme's helper escapes what it prints --}}
+                {!! posted_by() !!}{{-- nosemgrep -- the theme's helper escapes what it prints --}}
             </div>
         @endif
     </header>
-    {!! post_thumbnail() !!}
+    {!! post_thumbnail() !!}{{-- nosemgrep -- the theme's helper escapes what it prints --}}
     <div class="entry-summary">
         @excerpt
     </div>

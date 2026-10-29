@@ -13,7 +13,7 @@
     <div class="text-center mb-8">
         <h2 class="text-2xl font-bold text-foreground">@php esc_html_e( 'Set new password', 'woocommerce' ); @endphp</h2>
         <p class="mt-2 text-sm text-muted">
-            {!! apply_filters( 'woocommerce_reset_password_message', esc_html__( 'Enter a new password below.', 'woocommerce' ) ) !!}
+            {!! wp_kses_post( apply_filters( 'woocommerce_reset_password_message', esc_html__( 'Enter a new password below.', 'woocommerce' ) ) ) !!}
         </p>
     </div>
 

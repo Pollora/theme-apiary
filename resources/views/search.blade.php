@@ -9,7 +9,7 @@
     <div data-pollora-template="search">
         <header class="border-b border-outline pt-8 pb-8">
             <h1 class="text-4xl font-extrabold tracking-tight text-foreground">
-                {!! sprintf(__('Search results for: "%s"', '%theme_name%'), get_search_query()) !!}
+                {!! wp_kses_post( sprintf(__('Search results for: "%s"', '%theme_name%'), get_search_query()) ) !!}
             </h1>
         </header>
         @hasposts

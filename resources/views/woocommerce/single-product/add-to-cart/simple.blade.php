@@ -52,7 +52,7 @@
         <x-button-large type="submit" name="add-to-cart" value="{!! esc_attr( $product->get_id() ) !!}" class="single_add_to_cart_button button alt rounded-l-none">
             {!! esc_html( $product->single_add_to_cart_text() ) !!}
             <span class="mx-2 opacity-50">—</span>
-            <span class="[&_del]:text-white/60 [&_del]:text-sm [&_ins]:no-underline">{!! $product->get_price_html() !!}</span>
+            <span class="[&_del]:text-white/60 [&_del]:text-sm [&_ins]:no-underline">{!! wp_kses_post( $product->get_price_html() ) !!}</span>
         </x-button-large>
         @php do_action( 'woocommerce_after_add_to_cart_button' ); @endphp
     </form>

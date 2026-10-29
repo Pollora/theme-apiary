@@ -47,12 +47,12 @@
                     <div class="relative flex gap-4">
                         <div class="flex size-8 shrink-0 items-center justify-center rounded-full bg-surface-alt ring-4 ring-white">
                             @if (!empty($icons['comment']))
-                                <span class="text-muted">{!! $icons['comment'] !!}</span>
+                                <span class="text-muted">{!! $icons['comment'] !!}{{-- nosemgrep -- the theme's own SVG icon --}}</span>
                             @endif
                         </div>
                         <div class="min-w-0 flex-1">
                             <p class="text-xs font-medium text-muted">
-                                {!! date_i18n( esc_html__( 'l jS \o\f F Y, h:ia', 'woocommerce' ), strtotime( $note->comment_date ) ) !!}
+                                {!! esc_html( date_i18n( esc_html__( 'l jS \o\f F Y, h:ia', 'woocommerce' ), strtotime( $note->comment_date ) ) ) !!}
                             </p>
                             <div class="mt-1 text-sm text-foreground prose prose-sm max-w-none">
                                 {!! wp_kses_post( wpautop( wptexturize( $note->comment_content ) ) ) !!}

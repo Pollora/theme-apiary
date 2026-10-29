@@ -89,7 +89,7 @@ class ProductUrlResolver
         }
 
         // Lightweight mode: parse the serialized `_wp_attachment_metadata` directly
-        $meta = @unserialize($row->attachment_metadata);
+        $meta = @unserialize($row->attachment_metadata, ['allowed_classes' => false]); // nosemgrep -- allowed_classes is false: no object can be instantiated; the metadata is a plain array
 
         if (! empty($meta['sizes']['woocommerce_thumbnail']['file']) && ! empty($meta['file'])) {
             return $this->getUploadBaseUrl().'/'.dirname($meta['file']).'/'.$meta['sizes']['woocommerce_thumbnail']['file'];

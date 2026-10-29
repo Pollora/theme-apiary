@@ -26,7 +26,7 @@ do_action( 'woocommerce_before_customer_login_form' );
 
 			<div>
 				<label for="username" class="block text-sm font-medium text-foreground">@php esc_html_e( 'Username or email address', 'woocommerce' ); @endphp&nbsp;<span class="text-error" aria-hidden="true">*</span></label>
-				<input type="text" class="mt-1.5 block w-full rounded-lg border border-outline px-3.5 py-2.5 text-sm text-foreground shadow-xs placeholder:text-subtle focus:border-ring focus:ring-2 focus:ring-ring/20 focus:outline-hidden" name="username" id="username" autocomplete="username" required aria-required="true" value="{!! ( ! empty( $_POST['username'] ) ) ? esc_attr( wp_unslash( $_POST['username'] ) ) : '' !!}" />
+				<input type="text" class="mt-1.5 block w-full rounded-lg border border-outline px-3.5 py-2.5 text-sm text-foreground shadow-xs placeholder:text-subtle focus:border-ring focus:ring-2 focus:ring-ring/20 focus:outline-hidden" name="username" id="username" autocomplete="username" required aria-required="true" value="{!! esc_attr( ! empty( $_POST['username'] ) ? wp_unslash( $_POST['username'] ) : '' ) !!}" />
 			</div>
 
 			<div>
@@ -70,13 +70,13 @@ do_action( 'woocommerce_before_customer_login_form' );
 			@if ( 'no' === get_option( 'woocommerce_registration_generate_username' ) )
 				<div>
 					<label for="reg_username" class="block text-sm font-medium text-foreground">@php esc_html_e( 'Username', 'woocommerce' ); @endphp&nbsp;<span class="text-error" aria-hidden="true">*</span></label>
-					<input type="text" class="mt-1.5 block w-full rounded-lg border border-outline px-3.5 py-2.5 text-sm text-foreground shadow-xs placeholder:text-subtle focus:border-ring focus:ring-2 focus:ring-ring/20 focus:outline-hidden" name="username" id="reg_username" autocomplete="username" value="{!! ( ! empty( $_POST['username'] ) ) ? esc_attr( wp_unslash( $_POST['username'] ) ) : '' !!}" />
+					<input type="text" class="mt-1.5 block w-full rounded-lg border border-outline px-3.5 py-2.5 text-sm text-foreground shadow-xs placeholder:text-subtle focus:border-ring focus:ring-2 focus:ring-ring/20 focus:outline-hidden" name="username" id="reg_username" autocomplete="username" value="{!! esc_attr( ! empty( $_POST['username'] ) ? wp_unslash( $_POST['username'] ) : '' ) !!}" />
 				</div>
 			@endif
 
 			<div>
 				<label for="reg_email" class="block text-sm font-medium text-foreground">@php esc_html_e( 'Email address', 'woocommerce' ); @endphp&nbsp;<span class="text-error" aria-hidden="true">*</span></label>
-				<input type="email" class="mt-1.5 block w-full rounded-lg border border-outline px-3.5 py-2.5 text-sm text-foreground shadow-xs placeholder:text-subtle focus:border-ring focus:ring-2 focus:ring-ring/20 focus:outline-hidden" name="email" id="reg_email" autocomplete="email" value="{!! ( ! empty( $_POST['email'] ) ) ? esc_attr( wp_unslash( $_POST['email'] ) ) : '' !!}" />
+				<input type="email" class="mt-1.5 block w-full rounded-lg border border-outline px-3.5 py-2.5 text-sm text-foreground shadow-xs placeholder:text-subtle focus:border-ring focus:ring-2 focus:ring-ring/20 focus:outline-hidden" name="email" id="reg_email" autocomplete="email" value="{!! esc_attr( ! empty( $_POST['email'] ) ? wp_unslash( $_POST['email'] ) : '' ) !!}" />
 				@if ( 'no' !== get_option( 'woocommerce_registration_generate_password' ) )
 					<p class="mt-2 text-xs text-muted">@php esc_html_e( 'A password will be sent to your email address.', 'woocommerce' ); @endphp</p>
 				@endif
@@ -114,7 +114,7 @@ do_action( 'woocommerce_before_customer_login_form' );
 
 			<div>
 				<label for="username" class="block text-sm font-medium text-foreground">@php esc_html_e( 'Username or email address', 'woocommerce' ); @endphp&nbsp;<span class="text-error" aria-hidden="true">*</span></label>
-				<input type="text" class="mt-1.5 block w-full rounded-lg border border-outline px-3.5 py-2.5 text-sm text-foreground shadow-xs placeholder:text-subtle focus:border-ring focus:ring-2 focus:ring-ring/20 focus:outline-hidden" name="username" id="username" autocomplete="username" required aria-required="true" value="{!! ( ! empty( $_POST['username'] ) ) ? esc_attr( wp_unslash( $_POST['username'] ) ) : '' !!}" />
+				<input type="text" class="mt-1.5 block w-full rounded-lg border border-outline px-3.5 py-2.5 text-sm text-foreground shadow-xs placeholder:text-subtle focus:border-ring focus:ring-2 focus:ring-ring/20 focus:outline-hidden" name="username" id="username" autocomplete="username" required aria-required="true" value="{!! esc_attr( ! empty( $_POST['username'] ) ? wp_unslash( $_POST['username'] ) : '' ) !!}" />
 			</div>
 
 			<div>

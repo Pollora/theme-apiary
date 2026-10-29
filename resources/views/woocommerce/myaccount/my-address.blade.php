@@ -31,7 +31,7 @@
 @endphp
 
 <p class="text-sm text-muted mb-6">
-    {!! apply_filters( 'woocommerce_my_account_my_address_description', esc_html__( 'The following addresses will be used on the checkout page by default.', 'woocommerce' ) ) !!}
+    {!! wp_kses_post( apply_filters( 'woocommerce_my_account_my_address_description', esc_html__( 'The following addresses will be used on the checkout page by default.', 'woocommerce' ) ) ) !!}
 </p>
 
 <div class="woocommerce-Addresses col2-set addresses grid grid-cols-1 {{ count($get_addresses) > 1 ? 'sm:grid-cols-2' : '' }} gap-4">
@@ -44,7 +44,7 @@
                 <div class="flex items-center gap-3">
                     @if (!empty($icons[$name]))
                         <div class="flex size-9 shrink-0 items-center justify-center rounded-lg bg-surface-alt text-muted">
-                            {!! $icons[$name] !!}
+                            {!! $icons[$name] !!}{{-- nosemgrep -- the theme's own SVG icon --}}
                         </div>
                     @endif
                     <h3 class="woocommerce-column__title text-sm font-semibold text-foreground">{!! esc_html( $address_title ) !!}</h3>
@@ -52,9 +52,9 @@
                 <a href="{{ esc_url( wc_get_endpoint_url( 'edit-address', $name ) ) }}"
                    class="edit inline-flex items-center gap-1.5 rounded-lg border border-outline px-3 py-1.5 text-xs font-medium text-muted shadow-xs hover:bg-surface-alt hover:text-foreground transition-colors">
                     @if (!empty($icons['edit']))
-                        {!! $icons['edit'] !!}
+                        {!! $icons['edit'] !!}{{-- nosemgrep -- the theme's own SVG icon --}}
                     @endif
-                    {!! $address ? esc_html__( 'Edit', 'woocommerce' ) : esc_html__( 'Add', 'woocommerce' ) !!}
+                    {!! esc_html( $address ? __( 'Edit', 'woocommerce' ) : __( 'Add', 'woocommerce' ) ) !!}
                 </a>
             </div>
             <address class="text-sm text-muted not-italic leading-relaxed">

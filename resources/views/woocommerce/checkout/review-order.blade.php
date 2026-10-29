@@ -31,7 +31,7 @@
 			@if ( $_product && $_product->exists() && $cart_item['quantity'] > 0 && apply_filters( 'woocommerce_checkout_cart_item_visible', true, $cart_item, $cart_item_key ) )
 				<li class="flex items-center gap-4 py-3 {!! esc_attr( apply_filters( 'woocommerce_cart_item_class', 'cart_item', $cart_item, $cart_item_key ) ) !!}">
 					<div class="relative shrink-0 size-14 rounded-lg bg-surface-alt [&_img]:size-full [&_img]:object-cover [&_img]:m-0">
-						{!! apply_filters( 'woocommerce_checkout_item_thumbnail', $_product->get_image(), $cart_item, $cart_item_key ) !!}
+						{!! apply_filters( 'woocommerce_checkout_item_thumbnail', $_product->get_image(), $cart_item, $cart_item_key ) !!}{{-- nosemgrep -- WooCommerce returns this markup escaped, as its own templates print it --}}
 						@if ( $cart_item['quantity'] > 1 )
 							<span class="absolute -top-1 -right-1 flex items-center justify-center size-5 text-[10px] font-bold text-white bg-primary rounded-full ring-2 ring-white">{{ $cart_item['quantity'] }}</span>
 						@endif
@@ -78,7 +78,7 @@
 					</div>
 					<div class="text-right shrink-0">
 						<div class="text-sm font-semibold text-foreground">
-							{!! apply_filters( 'woocommerce_cart_item_subtotal', WC()->cart->get_product_subtotal( $_product, $qty ), $cart_item, $cart_item_key ) !!}
+							{!! wp_kses_post( apply_filters( 'woocommerce_cart_item_subtotal', WC()->cart->get_product_subtotal( $_product, $qty ), $cart_item, $cart_item_key ) ) !!}
 						</div>
 						@if ( $is_on_sale && $savings > 0 )
 							<span class="inline-block mt-1 rounded-full bg-accent px-2 py-0.5 text-[11px] font-semibold text-foreground">

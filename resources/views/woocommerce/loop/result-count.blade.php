@@ -21,16 +21,16 @@
         @php
             $orderedby_placeholder = empty($orderedby) ? '%2$s' : '<span class="screen-reader-text">%2$s</span>';
         @endphp
-        {!! sprintf(
+        {!! wp_kses_post( sprintf(
             _n('Showing all %1$d result', 'Showing all %1$d results', $total, 'woocommerce') . $orderedby_placeholder,
             $total,
             e($orderedby)
-        ) !!}
+        ) ) !!}
     @else
         @php
             $orderedby_placeholder = empty($orderedby) ? '%4$s' : '<span class="screen-reader-text">%4$s</span>';
         @endphp
-        {!! sprintf(
+        {!! wp_kses_post( sprintf(
             _nx(
                 'Showing %1$d&ndash;%2$d of %3$d result',
                 'Showing %1$d&ndash;%2$d of %3$d results',
@@ -42,6 +42,6 @@
             $last,
             $total,
             e($orderedby)
-        ) !!}
+        ) ) !!}
     @endif
 </div>

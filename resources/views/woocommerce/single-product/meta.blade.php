@@ -24,7 +24,7 @@
     @if ( wc_product_sku_enabled() && ( $product->get_sku() || $product->is_type( \Automattic\WooCommerce\Enums\ProductType::VARIABLE ) ) )
         <div class="sku_wrapper">
             <span class="font-medium text-muted">{{ __('SKU:', 'woocommerce') }}</span>
-            <span class="sku">{!! ( $sku = $product->get_sku() ) ? $sku : esc_html__( 'N/A', 'woocommerce' ) !!}</span>
+            <span class="sku">{!! esc_html( ( $sku = $product->get_sku() ) ? $sku : __( 'N/A', 'woocommerce' ) ) !!}</span>
         </div>
     @endif
 

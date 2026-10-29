@@ -78,7 +78,7 @@
                         <div>
                             @if ( ! empty( $method['method']['last4'] ) )
                                 <span class="text-sm font-semibold text-foreground">
-                                    {!! sprintf( esc_html__( '%1$s ending in %2$s', 'woocommerce' ), esc_html( wc_get_credit_card_type_label( $method['method']['brand'] ) ), '<strong>' . esc_html( $method['method']['last4'] ) . '</strong>' ) !!}
+                                    {!! wp_kses_post( sprintf( esc_html__( '%1$s ending in %2$s', 'woocommerce' ), esc_html( wc_get_credit_card_type_label( $method['method']['brand'] ) ), '<strong>' . esc_html( $method['method']['last4'] ) . '</strong>' ) ) !!}
                                 </span>
                             @else
                                 <span class="text-sm font-semibold text-foreground">{!! esc_html( wc_get_credit_card_type_label( $method['method']['brand'] ) ) !!}</span>
@@ -112,7 +112,7 @@
     {{-- Empty state --}}
     <div class="rounded-xl border border-dashed border-outline bg-surface/50 py-12 text-center">
         @if (!empty($icons['empty-payment']))
-            <span class="flex justify-center text-subtle">{!! $icons['empty-payment'] !!}</span>
+            <span class="flex justify-center text-subtle">{!! $icons['empty-payment'] !!}{{-- nosemgrep -- the theme's own SVG icon --}}</span>
         @endif
         <h3 class="mt-4 text-sm font-semibold text-foreground">@php esc_html_e( 'No saved methods found.', 'woocommerce' ); @endphp</h3>
         <p class="mt-1 text-sm text-muted">@php esc_html_e( 'Add a payment method for faster checkout.', 'woocommerce' ); @endphp</p>

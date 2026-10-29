@@ -12,7 +12,7 @@
             <h2 class="text-2xl font-bold tracking-tight text-foreground">{{ __('New arrivals', 'woocommerce') }}</h2>
             <p class="mt-2 text-sm text-muted">{{ __('Check out the latest additions to our collection.', '%theme_name%') }}</p>
             <div class="mt-8">
-                {!! do_shortcode('[products limit="8" columns="4" orderby="date" order="DESC"]') !!}
+                {!! do_shortcode('[products limit="8" columns="4" orderby="date" order="DESC"]') !!}{{-- nosemgrep -- a WooCommerce shortcode with fixed arguments --}}
             </div>
         </section>
 
@@ -57,7 +57,7 @@
             <h2 class="text-2xl font-bold tracking-tight text-foreground">{{ __('On sale', 'woocommerce') }}</h2>
             <p class="mt-2 text-sm text-muted">{{ __('Great deals on selected items.', '%theme_name%') }}</p>
             <div class="mt-8">
-                {!! do_shortcode('[sale_products limit="4" columns="4" orderby="rand"]') !!}
+                {!! do_shortcode('[sale_products limit="4" columns="4" orderby="rand"]') !!}{{-- nosemgrep -- a WooCommerce shortcode with fixed arguments --}}
             </div>
         </section>
     @else
