@@ -40,7 +40,7 @@
                 'before' => '<div class="page-links">'.esc_html__('Pages:', '%theme_name%'),
                 'after' => '</div>',
                 'echo' => false
-            ]);
+            ])
         !!}
     </div>
     <footer class="entry-footer">
